@@ -661,24 +661,24 @@ class TokoGame:
         rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
         crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
 
-        g1 = Game("G001", "Counter Strike 2", 549000, "RPG", nova,
+        g1 = Game("G001", "Counter Strike 2", 549000, "Tembak", nova,
                "Tembak-menembak taktis legendaris. Bergabunglah dalam pertempuran tim dengan mekanik smoke dinamis dan sub-tick rate presisi",
-                diskon=25, rilis="2025", ulasan=94,gambar=r"Gambar\cs2.png")
+                diskon=25, rilis="2025", ulasan=94,gambar=r"Gambar\CS2.png")
         g2 = Game("G002", "Need for Speed Unbound", 399000, "Balapan", barn,
                "Balapan liar jalanan dengan gaya seni grafiti anime yang unik, kustomisasi mobil mendalam, dan kejar-kejaran polisi yang menegangkan.",
-                diskon=40, rilis="2026", ulasan=88,gambar=r"Gambar\nfs_onbound.png")
+                diskon=75, rilis="2026", ulasan=88,gambar=r"Gambar\nfs_onbound.png")
         g3 = Game("G003", "Age of Empires IV", 299000, "Strategi", iron,
                "Pimpin peradaban bersejarah menuju kejayaan melalui perang abad pertengahan, diplomasi, dan manajemen kerajaan.",
                 rilis="2024", ulasan=91,gambar=r"Gambar\aoe4.png")
         g4 = Game("G004", "Resident Evil 4", 249000, "Horor", capcom,
                "Misi penyelamatan menegangkan di desa terpencil yang terinfeksi wabah parasit mematikan.",
-                diskon=50, rilis="2025", ulasan=86,gambar=r"Gambar\re4.png")
+                diskon=50, rilis="2025", ulasan=86,gambar=r"Gambar\ResidentEvil4.png")
         g5 = Game("G005", "Stardew Valley", 115000, "Indie", barn,
                 "Warisi kebun tua kakekmu, pelajari cara hidup dari tanah, dan ubah ladang terbengkalai menjadi rumah yang makmur.",
                 diskon=20, rilis="2016", ulasan=98, gambar=r"Gambar\stardew_valley.png")
         g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", rockstar,
                "Arthur Morgan and the Van der Linde Gang are outlaws on the run. With federal agents and bounty hunters massing on their heels, the gang must rob, steal, and fight their way across the rugged heartland in order to survive.",
-               diskon=15, rilis="December 5, 2019", ulasan=90,gambar=r"Gambar\Rdr2.png")
+               diskon=30, rilis="December 5, 2019", ulasan=90,gambar=r"Gambar\RDR2.png")
         g7 = Game("G007", "Rise of the Tomb Raider", 459000, "Petualangan", crystaldynamic,
                "Rise of the Tomb Raider: 20 Year Celebration includes the base game and Season Pass featuring all-new content. Explore Croft Manor in the new “Blood Ties” story, then defend it against a zombie invasion in Lara Nightmare.",
                diskon=30, rilis="January 28, 2016", ulasan=84,gambar=r"Gambar\TombRaider.png")
@@ -689,23 +689,25 @@ class TokoGame:
                "Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing Legend in Forza Horizon's biggest open world driving adventure yet.",
                 rilis="19 May, 2026", ulasan=82,gambar=r"Gambar\Forza.png")
         g10 = Game("G010", "Resident Evil Requiem", 819000, "Horor", capcom,
-                "Requiem for the dead. Nightmare for the living. Prepare to escape death in a heart-stopping experience that will chill you to your core.",
+                "Lagu duka bagi yang telah tiada. Mimpi buruk bagi yang masih hidup. Bersiaplah meloloskan diri dari maut dalam pengalaman yang memacu jantung dan membuat Anda gemetar hingga ke tulang.",
                  diskon=35, rilis="27 Feb, 2026", ulasan=87,gambar=r"Gambar\ResidentEvil.png")
-        g11 = Game("G011", "Tiny Kingdoms", 99000, "Indie", barn,
-                "Kerajaan mungil, keputusan besar. Puzzle-strategi singkat yang bikin ketagihan.",
-                diskon=10, rilis="2023", ulasan=93)
-        g12 = Game("G012", "Blade of Ashes", 649000, "Aksi", nova,
-                "Samurai di dunia pasca-perang: duel presisi, cerita kelam, visual memukau.",
-                 rilis="2026", ulasan=92)
         g11 = Game("G011", "Elden Ring", 599000, "RPG", bandai,
                 "RPG dunia terbuka dari FromSoftware dan George R.R. Martin. "
                 "Jelajahi Lands Between sebagai Tarnished dan jadilah Elden Lord.",
-                diskon=25, rilis="2022", ulasan=92, gambar=r"Gambar\EldenRing.png")
+                diskon=30, rilis="2022", ulasan=92, gambar=r"Gambar\EldenRing.png")
         g12 = Game("G012", "Cyberpunk 2077", 549000, "Aksi", cdpr,
-                "RPG aksi dunia terbuka di Night City. Jadi V, tentara bayaran "
+                "RPG aksi dunia terbuka di Night City. Jadi V, tentara bayaran."
                 "yang mengejar implan yang menjanjikan keabadian.",
-                diskon=50, rilis="2020", ulasan=82, gambar=r"Gambar\Cyberpunk2077.png")
-
+                diskon=50, rilis="2020", ulasan=82, gambar=r"Gambar\Cyberpunk.png")
+        g13 = Game("G013", "Hollow KnIght", 130000, "Indie", xbox,
+                "Tentukan jalanmu sendiri di Hollow Knight! Sebuah petualangan aksi epik melintasi kerajaan serangga dan pahlawan yang telah runtuh dan luas. Jelajahi gua-gua yang berliku, lawan makhluk-makhluk yang tercemar, dan jalin persahabatan dengan serangga-serangga unik—semuanya dalam gaya 2D klasik yang digambar dengan tangan.",
+                rilis="2017", ulasan=92, gambar=r"Gambar\HollowKnight.png")
+        g14 = Game("G014", "Uncharted 4", 720000, "Petualangan", cdpr,
+                "Bermainlah sebagai Nathan Drake dan Chloe Frazer dalam petualangan mandiri mereka masing-masing saat mereka menghadapi masa lalu dan mengukir warisan mereka sendiri.",
+                diskon=50, rilis="2022", ulasan=120, gambar=r"Gambar\Uncharted4.png")
+        g15 = Game("G015", "DOOM The Dark Age", 549000, "Tembak", cdpr,
+                "Pemain akan mengenakan sepatu bot berlumuran darah milik DOOM Slayer dalam perang abad pertengahan yang kelam dan mengerikan melawan Neraka—sebuah pengalaman yang belum pernah ada sebelumnya.",
+                diskon=20, rilis="2025", ulasan=93, gambar=r"Gambar\Doom.png")
         d1 = DLC("D001", "Elden Ring: Shadow of the Erdtree", 279000, g11,
                  "Ekspansi resmi: masuki Realm of Shadow, hadapi bos baru, "
                  "dan temukan senjata serta kelas baru.",
@@ -721,8 +723,8 @@ class TokoGame:
                     "Cyberpunk 2077 dan Red Dead Redemption 2 dalam satu paket hemat.",
                     gambar=r"Gambar\Rdr2.png")
 
-        self.__katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, d1, d2, b1, b2]
-        self.__unggulan = [g1, g2, g6, g7, g12]
+        self.__katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13, g14, g15, d1, d2, b1, b2]
+        self.__unggulan = [g2, g4, g12, g14]
 
         # library awal + jam main
         for game, jam in ((g3, 42.5), (g5, 18.0), (g9, 7.5)):
@@ -1120,9 +1122,8 @@ class NavBar(tk.Frame):
         self._saldo = tk.Label(self, fg="#9a3d00", bg="#fff1e4", padx=12, pady=5,
                                font=(Tema.FONT, 10, "bold"))
         self._saldo.pack(side="right", padx=8)
-        self.cari = InputCari(self, "Cari game, genre, publisher...", lambda q: None,
+        self.cari = InputCari(self, "Cari game, genre, publisher...", self._app.cari,
                               lebar=28, bg=Tema.CHIP)
-        self.cari.nonaktifkan()
         self.cari.pack(side="right", padx=16)
         self.perbarui()
 
