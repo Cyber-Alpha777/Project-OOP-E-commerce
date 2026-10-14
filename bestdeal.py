@@ -653,8 +653,13 @@ class TokoGame:
         lantern = Seller("S003", "Lantern Works", "hi@lantern.id", "081200000003", "Surabaya", 4.6)
         barn = Seller("S004", "Pixel Barn", "hi@pixelbarn.id", "081200000004", "Yogyakarta", 4.9)
         resmi = Seller("S000", "BestDeal Official", "cs@bestdeal.id", "081200000000", "Jakarta", 5.0)
-
-        
+        bandai = Seller("S005", "Bandai Namco", "cs@bandainamco.id", "081200000005", "Tokyo", 4.7)
+        cdpr = Seller("S006", "CD PROJEKT RED", "cs@cdprojektred.id", "081200000006", "Warsaw", 4.5)
+        sega = Seller("S007", "SEGA", "hi@sega.id", "081200000007", "Tokyo", 4.6)
+        xbox = Seller("S008", "Xbox Game Studios", "hi@xboxgamestudios.id", "081200000008", "Redmond", 4.8)
+        capcom = Seller("S009", "Capcom", "hi@capcom.id", "081200000009", "USA", 4.7)
+        rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
+        crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
 
         g1 = Game("G001", "Eclipse Warden", 549000, "RPG", nova,
                "RPG dunia terbuka: jadi penjaga terakhir kerajaan saat gerhana abadi menelan langit.",
@@ -671,40 +676,44 @@ class TokoGame:
         g5 = Game("G005", "Pixel Harvest", 129000, "Indie", barn,
                "Simulasi bertani santai bergaya pixel art. Tanam, panen, dan dekor rumahmu.",
                rilis="2023", ulasan=97)
-        g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", nova,
-               "Aksi hack-and-slash di kota melayang, dengan combo tanpa batas dan bos raksasa.",
-               diskon=15, rilis="2026", ulasan=90,gambar=r"Gambar\Rdr2.png")
-        g7 = Game("G007", "Void Raiders", 459000, "Tembak", iron,
-               "Shooter co-op 4 pemain: rebut kapal alien terbengkalai dan bawa pulang hartanya.",
-               diskon=30, rilis="2026", ulasan=84)
-        g8 = Game("G008", "Mythic Tactics", 349000, "Strategi", iron,
-               "Strategi turn-based dengan pasukan mitologi dan pohon skill yang dalam.",
-                diskon=20, rilis="2025", ulasan=89)
-        g9 = Game("G009", "Drift Kings", 279000, "Balapan", barn,
-               "Arcade racing kompetitif online. Naik peringkat dan jadi raja drift.",
-                rilis="2024", ulasan=82)
-        g10 = Game("G010", "Last Signal", 219000, "Horor", lantern,
-                "Horor survival di stasiun radio terpencil. Sinyal terakhir bukan dari manusia.",
-                 diskon=35, rilis="2024", ulasan=87)
-        g11 = Game("G011", "Tiny Kingdoms", 99000, "Indie", barn,
-                "Kerajaan mungil, keputusan besar. Puzzle-strategi singkat yang bikin ketagihan.",
-                diskon=10, rilis="2023", ulasan=93)
-        g12 = Game("G012", "Blade of Ashes", 649000, "Aksi", nova,
-                "Samurai di dunia pasca-perang: duel presisi, cerita kelam, visual memukau.",
-                 rilis="2026", ulasan=92)
+        g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", rockstar,
+               "Arthur Morgan and the Van der Linde Gang are outlaws on the run. With federal agents and bounty hunters massing on their heels, the gang must rob, steal, and fight their way across the rugged heartland in order to survive.",
+               diskon=15, rilis="December 5, 2019", ulasan=90,gambar=r"Gambar\Rdr2.png")
+        g7 = Game("G007", "Rise of the Tomb Raider", 459000, "Petualangan", crystaldynamic,
+               "Rise of the Tomb Raider: 20 Year Celebration includes the base game and Season Pass featuring all-new content. Explore Croft Manor in the new “Blood Ties” story, then defend it against a zombie invasion in Lara Nightmare.",
+               diskon=30, rilis="January 28, 2016", ulasan=84,gambar=r"Gambar\TombRaider.png")
+        g8 = Game("G008", "Total War Three Kingdoms", 349000, "Strategi", sega,
+               "Unite Ancient China under your rule through a thrilling blend of turn-based empire building and real-time battles. Use the Guanxi System and diplomacy to forge alliances, and build powerful armies with hundreds of unique infantry, cavalry and war machine units.",
+                diskon=20, rilis="23 May, 2019", ulasan=89, gambar=r"Gambar\TotalWar.png")
+        g9 = Game("G009", "Forza Horizon 6", 879000, "Balapan", xbox,
+               "Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing Legend in Forza Horizon's biggest open world driving adventure yet.",
+                rilis="19 May, 2026", ulasan=82,gambar=r"Gambar\Forza.png")
+        g10 = Game("G010", "Resident Evil Requiem", 819000, "Horor", capcom,
+                "Requiem for the dead. Nightmare for the living. Prepare to escape death in a heart-stopping experience that will chill you to your core.",
+                 diskon=35, rilis="27 Feb, 2026", ulasan=87,gambar=r"Gambar\ResidentEvil.png")
+        g11 = Game("G011", "Elden Ring", 599000, "RPG", bandai,
+                "RPG dunia terbuka dari FromSoftware dan George R.R. Martin. "
+                "Jelajahi Lands Between sebagai Tarnished dan jadilah Elden Lord.",
+                diskon=25, rilis="2022", ulasan=92, gambar=r"Gambar\EldenRing.png")
+        g12 = Game("G012", "Cyberpunk 2077", 549000, "Aksi", cdpr,
+                "RPG aksi dunia terbuka di Night City. Jadi V, tentara bayaran "
+                "yang mengejar implan yang menjanjikan keabadian.",
+                diskon=50, rilis="2020", ulasan=82, gambar=r"Gambar\Cyberpunk2077.png")
 
-        d1 = DLC("D001", "Eclipse Warden: Shadow Realm", 189000, g1,
-                 "Ekspansi wilayah baru, 12 jam cerita tambahan, dan senjata legendaris.",
-                 )
-        d2 = DLC("D002", "Neon Circuit: Turbo Pack", 99000, g2,
-                 "10 mobil baru, 4 trek malam hari, dan kustomisasi neon ekstra.",
-                 )
-        b1 = Bundle("B001", "Paket Horor Malam", [g4, g10], resmi,
-                    "Dua game horor sekaligus dengan harga hemat. Jangan main sendirian.",
-                    )
-        b2 = Bundle("B002", "Paket Strategi Raja", [g3, g8], resmi,
-                    "Dua strategi terbaik dalam satu paket untuk para ahli taktik.",
-                    )
+        d1 = DLC("D001", "Elden Ring: Shadow of the Erdtree", 279000, g11,
+                 "Ekspansi resmi: masuki Realm of Shadow, hadapi bos baru, "
+                 "dan temukan senjata serta kelas baru.",
+                 gambar=r"Gambar\ShadowOfTheErdtree.png")
+        d2 = DLC("D002", "Cyberpunk 2077: Phantom Liberty", 369000, g12,
+                 "Spionase thriller di distrik Dogtown. Misi baru, "
+                 "senjata baru, dan cerita bertabur bintang.",
+                 gambar=r"Gambar\PhantomLiberty.png")
+        b1 = Bundle("B001", "Paket RPG Legendaris", [g11, g12], resmi,
+                    "Elden Ring dan Cyberpunk 2077 dalam satu paket hemat.",
+                    gambar=r"Gambar\EldenRing.png")
+        b2 = Bundle("B002", "Paket Aksi Dunia Terbuka", [g12, g6], resmi,
+                    "Cyberpunk 2077 dan Red Dead Redemption 2 dalam satu paket hemat.",
+                    gambar=r"Gambar\Rdr2.png")
 
         self.__katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, d1, d2, b1, b2]
         self.__unggulan = [g1, g2, g6, g7, g12]
