@@ -1,7 +1,7 @@
 """
 BestDeal - Aplikasi Desktop Toko Game (tema putih-orange) berbasis Tkinter, rasio 16:9.
 
-Cara jalan:  python bestdeal.py   (Python 3.9+, tanpa library tambahan)
+Cara jalan:  pip install Pillow  lalu  python bestdeal.py   (Python 3.9+)
 
 Penerapan 4 pilar OOP
 ---------------------
@@ -25,8 +25,9 @@ import tkinter as tk
 import tkinter.font as tkfont
 from abc import ABC, abstractmethod
 from datetime import date
+from pathlib import Path
 from tkinter import messagebox, ttk
-
+from PIL import Image, ImageOps, ImageTk
 
 # ======================================================================
 # UTIL
@@ -206,7 +207,7 @@ class Produk(ABC):
     """Produk abstrak: Game, DLC, Bundle punya aturan harga & beli sendiri-sendiri."""
 
     def __init__(self, id_produk, nama_produk, harga, stok, kategori, seller=None,
-                 deskripsi="", warna=("#2f8cff", "#0b1017")):
+                 deskripsi="", gambar=None):
         self.__id_produk = id_produk
         self.__nama_produk = nama_produk
         self.__harga = harga
@@ -214,7 +215,7 @@ class Produk(ABC):
         self.__kategori = kategori
         self.__seller = seller
         self.__deskripsi = deskripsi
-        self.__warna = warna
+        self.__gambar = gambar
 
     # ==== Getter ====
     def get_id_produk(self):
@@ -238,8 +239,8 @@ class Produk(ABC):
     def get_deskripsi(self):
         return self.__deskripsi
 
-    def get_warna(self):
-        return self.__warna
+    def get_gambar(self):
+        return self.__gambar
 
     # ==== Setter ====
     def set_id_produk(self, id_produk):
@@ -260,6 +261,10 @@ class Produk(ABC):
 
     def set_kategori(self, kategori):
         self.__kategori = kategori
+
+    def set_gambar(self, gambar):
+        path = str(gambar).strip() if gambar else ""
+        self.__gambar = path or None
 
     def set_seller(self, seller):
         self.__seller = seller
@@ -310,9 +315,9 @@ class Produk(ABC):
 
 
 class Game(Produk):
-    def __init__(self, id_produk, nama, harga, kategori, seller, deskripsi, warna,
-                 diskon=0, rilis="2025", ulasan=85):
-        super().__init__(id_produk, nama, harga, 9999, kategori, seller, deskripsi, warna)
+    def __init__(self, id_produk, nama, harga, kategori, seller, deskripsi, 
+                 diskon=0, rilis="2025", ulasan=85, gambar=None):
+        super().__init__(id_produk, nama, harga, 9999, kategori, seller, deskripsi, gambar)
         self.__diskon = diskon
         self.__rilis = rilis
         self.__ulasan = ulasan
@@ -345,9 +350,9 @@ class Game(Produk):
 
 
 class DLC(Produk):
-    def __init__(self, id_produk, nama, harga, game_induk, deskripsi, warna):
+    def __init__(self, id_produk, nama, harga, game_induk, deskripsi, gambar=None):
         super().__init__(id_produk, nama, harga, 9999, "DLC", game_induk.get_seller(),
-                         deskripsi, warna)
+                         deskripsi, gambar)
         self.__game_induk = game_induk
 
     def get_game_induk(self):
@@ -374,9 +379,11 @@ class DLC(Produk):
 
 
 class Bundle(Produk):
-    def __init__(self, id_produk, nama, daftar_game, seller, deskripsi, warna, potongan=0.15):
+    def __init__(self, id_produk, nama, daftar_game, seller, deskripsi, potongan=0.15,
+                 gambar=None):
         total_normal = sum(g.get_harga() for g in daftar_game)
-        super().__init__(id_produk, nama, total_normal, 9999, "Paket", seller, deskripsi, warna)
+        super().__init__(id_produk, nama, total_normal, 9999, "Paket", seller, deskripsi,
+                         gambar)
         self.__daftar_game = daftar_game
         self.__potongan = potongan
 
@@ -647,58 +654,57 @@ class TokoGame:
         barn = Seller("S004", "Pixel Barn", "hi@pixelbarn.id", "081200000004", "Yogyakarta", 4.9)
         resmi = Seller("S000", "BestDeal Official", "cs@bestdeal.id", "081200000000", "Jakarta", 5.0)
 
-        def g(*a, **k):
-            return Game(*a, **k)
+        
 
-        g1 = g("G001", "Eclipse Warden", 549000, "RPG", nova,
+        g1 = Game("G001", "Eclipse Warden", 549000, "RPG", nova,
                "RPG dunia terbuka: jadi penjaga terakhir kerajaan saat gerhana abadi menelan langit.",
-               ("#6a3df0", "#10002b"), diskon=25, rilis="2025", ulasan=94)
-        g2 = g("G002", "Neon Circuit", 399000, "Balapan", barn,
+                diskon=25, rilis="2025", ulasan=94)
+        g2 = Game("G002", "Neon Circuit", 399000, "Balapan", barn,
                "Balapan malam hari di kota neon dengan drift ekstrem dan mobil bisa dimodif.",
-               ("#00e5ff", "#1a0033"), diskon=40, rilis="2026", ulasan=88)
-        g3 = g("G003", "Iron Frontier", 299000, "Strategi", iron,
+                diskon=40, rilis="2026", ulasan=88)
+        g3 = Game("G003", "Iron Frontier", 299000, "Strategi", iron,
                "Bangun koloni di perbatasan baru, kelola sumber daya, dan pertahankan dari serangan.",
-               ("#c97b2d", "#2b1608"), rilis="2024", ulasan=91)
-        g4 = g("G004", "Hollow Lantern", 249000, "Horor", lantern,
+                rilis="2024", ulasan=91)
+        g4 = Game("G004", "Hollow Lantern", 249000, "Horor", lantern,
                "Telusuri hutan berkabut dengan satu lentera. Jangan biarkan apinya padam.",
-               ("#2e8b57", "#02120a"), diskon=50, rilis="2025", ulasan=86)
-        g5 = g("G005", "Pixel Harvest", 129000, "Indie", barn,
+                diskon=50, rilis="2025", ulasan=86)
+        g5 = Game("G005", "Pixel Harvest", 129000, "Indie", barn,
                "Simulasi bertani santai bergaya pixel art. Tanam, panen, dan dekor rumahmu.",
-               ("#ffd166", "#ef476f"), rilis="2023", ulasan=97)
-        g6 = g("G006", "Skyforge Legends", 599000, "Aksi", nova,
+               rilis="2023", ulasan=97)
+        g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", nova,
                "Aksi hack-and-slash di kota melayang, dengan combo tanpa batas dan bos raksasa.",
-               ("#ff6b35", "#1b1b3a"), diskon=15, rilis="2026", ulasan=90)
-        g7 = g("G007", "Void Raiders", 459000, "Tembak", iron,
+               diskon=15, rilis="2026", ulasan=90,gambar=r"Gambar\Rdr2.png")
+        g7 = Game("G007", "Void Raiders", 459000, "Tembak", iron,
                "Shooter co-op 4 pemain: rebut kapal alien terbengkalai dan bawa pulang hartanya.",
-               ("#3a86ff", "#000814"), diskon=30, rilis="2026", ulasan=84)
-        g8 = g("G008", "Mythic Tactics", 349000, "Strategi", iron,
+               diskon=30, rilis="2026", ulasan=84)
+        g8 = Game("G008", "Mythic Tactics", 349000, "Strategi", iron,
                "Strategi turn-based dengan pasukan mitologi dan pohon skill yang dalam.",
-               ("#e0aaff", "#240046"), diskon=20, rilis="2025", ulasan=89)
-        g9 = g("G009", "Drift Kings", 279000, "Balapan", barn,
+                diskon=20, rilis="2025", ulasan=89)
+        g9 = Game("G009", "Drift Kings", 279000, "Balapan", barn,
                "Arcade racing kompetitif online. Naik peringkat dan jadi raja drift.",
-               ("#f72585", "#3a0ca3"), rilis="2024", ulasan=82)
-        g10 = g("G010", "Last Signal", 219000, "Horor", lantern,
+                rilis="2024", ulasan=82)
+        g10 = Game("G010", "Last Signal", 219000, "Horor", lantern,
                 "Horor survival di stasiun radio terpencil. Sinyal terakhir bukan dari manusia.",
-                ("#9ca3af", "#111827"), diskon=35, rilis="2024", ulasan=87)
-        g11 = g("G011", "Tiny Kingdoms", 99000, "Indie", barn,
+                 diskon=35, rilis="2024", ulasan=87)
+        g11 = Game("G011", "Tiny Kingdoms", 99000, "Indie", barn,
                 "Kerajaan mungil, keputusan besar. Puzzle-strategi singkat yang bikin ketagihan.",
-                ("#80ed99", "#22577a"), diskon=10, rilis="2023", ulasan=93)
-        g12 = g("G012", "Blade of Ashes", 649000, "Aksi", nova,
+                diskon=10, rilis="2023", ulasan=93)
+        g12 = Game("G012", "Blade of Ashes", 649000, "Aksi", nova,
                 "Samurai di dunia pasca-perang: duel presisi, cerita kelam, visual memukau.",
-                ("#ef233c", "#2b2d42"), rilis="2026", ulasan=92)
+                 rilis="2026", ulasan=92)
 
         d1 = DLC("D001", "Eclipse Warden: Shadow Realm", 189000, g1,
                  "Ekspansi wilayah baru, 12 jam cerita tambahan, dan senjata legendaris.",
-                 ("#9d4edd", "#10002b"))
+                 )
         d2 = DLC("D002", "Neon Circuit: Turbo Pack", 99000, g2,
                  "10 mobil baru, 4 trek malam hari, dan kustomisasi neon ekstra.",
-                 ("#00b4d8", "#03045e"))
+                 )
         b1 = Bundle("B001", "Paket Horor Malam", [g4, g10], resmi,
                     "Dua game horor sekaligus dengan harga hemat. Jangan main sendirian.",
-                    ("#52796f", "#0b090a"))
+                    )
         b2 = Bundle("B002", "Paket Strategi Raja", [g3, g8], resmi,
                     "Dua strategi terbaik dalam satu paket untuk para ahli taktik.",
-                    ("#b08968", "#1d1308"))
+                    )
 
         self.__katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, d1, d2, b1, b2]
         self.__unggulan = [g1, g2, g6, g7, g12]
@@ -833,27 +839,55 @@ class Tema:
 
 
 def lukis_art(c, w, h, produk, badge=True):
-    """Gambar cover game prosedural (gradien + bentuk + monogram) di Canvas."""
-    c1, c2 = produk.get_warna()
-    n = 28
-    for i in range(n):
-        c.create_rectangle(0, h * i // n, w, h * (i + 1) // n + 1,
-                           fill=campur(c1, c2, i / (n - 1)), outline="")
-    rnd = random.Random(produk.get_id_produk())
-    for _ in range(4):
-        r = rnd.randint(int(h * 0.12), int(h * 0.35))
-        x, y = rnd.randint(0, w), rnd.randint(0, int(h * 0.6))
-        c.create_oval(x - r, y - r, x + r, y + r, outline="",
-                      fill=campur(c1, "#ffffff", rnd.uniform(0.08, 0.3)))
-    inisial = "".join(k[0] for k in produk.get_nama_produk().replace(":", "").split()[:2]).upper()
-    c.create_text(w // 2, int(h * 0.42), text=inisial, anchor="center",
-                  fill=campur(c1, "#ffffff", 0.55), font=(Tema.FONT, -int(h * 0.38), "bold"))
-    for lapis, gelap in ((0.62, 0.35), (0.80, 0.6)):
-        pts = [0, h]
-        for k in range(7):
-            pts += [w * k // 6, int(h * lapis) + rnd.randint(-int(h * 0.1), int(h * 0.1))]
-        pts += [w, h]
-        c.create_polygon(pts, fill=campur(c2, "#000000", gelap), outline="")
+    """Gambar placeholder cover produk di Canvas."""
+    latar = "#f3f4f6"
+    garis = "#d1d5db"
+    ikon = "#9ca3af"
+    c.create_rectangle(0, 0, w, h, fill=latar, outline="")
+
+    path_gambar = produk.get_gambar()
+    gambar_dimuat = False
+    if path_gambar:
+        path = Path(path_gambar)
+        if not path.is_absolute():
+            path = Path(__file__).resolve().parent / path
+        try:
+            with Image.open(path) as sumber:
+                gambar = ImageOps.contain(sumber.convert("RGB"), (w, h))
+                kanvas_gambar = Image.new("RGB", (w, h), latar)
+                posisi = ((w - gambar.width) // 2, (h - gambar.height) // 2)
+                kanvas_gambar.paste(gambar, posisi)
+            foto = ImageTk.PhotoImage(kanvas_gambar, master=c)
+        except (OSError, tk.TclError) as err:
+            c.create_text(w / 2, h / 2, text=f"Gagal memuat gambar:\n{err}",
+                          fill="#6b7280", font=(Tema.FONT, max(7, min(10, int(h * 0.12)))))
+        else:
+            c.create_image(w / 2, h / 2, image=foto)
+            c.gambar_produk = foto
+            gambar_dimuat = True
+
+    if not path_gambar:
+        ukuran_ikon = max(6, min(w * 0.09, h * 0.22))
+        tengah_x = w / 2
+        tengah_y = h * (0.40 if h >= 64 else 0.5)
+        kiri = tengah_x - ukuran_ikon
+        kanan = tengah_x + ukuran_ikon
+        atas = tengah_y - ukuran_ikon * 0.7
+        bawah = tengah_y + ukuran_ikon * 0.7
+        c.create_rectangle(kiri, atas, kanan, bawah, outline=ikon, width=2)
+        c.create_oval(kiri + ukuran_ikon * 0.2, atas + ukuran_ikon * 0.15,
+                      kiri + ukuran_ikon * 0.6, atas + ukuran_ikon * 0.55,
+                      fill=ikon, outline="")
+        c.create_polygon(kiri + ukuran_ikon * 0.1, bawah - ukuran_ikon * 0.1,
+                         kiri + ukuran_ikon * 0.48, atas + ukuran_ikon * 0.55,
+                         kanan - ukuran_ikon * 0.1, bawah - ukuran_ikon * 0.1,
+                         fill=ikon, outline=ikon)
+        if h >= 64:
+            c.create_text(w / 2, h * 0.78, text="Placeholder gambar",
+                          fill="#6b7280", font=(Tema.FONT, max(8, min(11, int(h * 0.08)))))
+    elif gambar_dimuat:
+        c.create_rectangle(1, 1, w - 1, h - 1, outline=garis)
+
     if badge and produk.label_tipe() != "Game":
         teks = produk.label_tipe().upper()
         c.create_rectangle(8, 8, 16 + len(teks) * 8, 28, fill=Tema.aksen, outline="")
