@@ -661,6 +661,7 @@ class TokoGame:
         rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
         crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
 
+<<<<<<< HEAD
         g1 = Game("G001", "Eclipse Warden", 549000, "RPG", nova,
                "RPG dunia terbuka: jadi penjaga terakhir kerajaan saat gerhana abadi menelan langit.",
                 diskon=25, rilis="2025", ulasan=94)
@@ -691,12 +692,58 @@ class TokoGame:
         g10 = Game("G010", "Resident Evil Requiem", 819000, "Horor", capcom,
                 "Requiem for the dead. Nightmare for the living. Prepare to escape death in a heart-stopping experience that will chill you to your core.",
                  diskon=35, rilis="27 Feb, 2026", ulasan=87,gambar=r"Gambar\ResidentEvil.png")
+<<<<<<< HEAD
+=======
+        g11 = Game("G011", "Elden Ring", 599000, "RPG", bandai,
+                "RPG dunia terbuka dari FromSoftware dan George R.R. Martin. "
+                "Jelajahi Lands Between sebagai Tarnished dan jadilah Elden Lord.",
+                diskon=25, rilis="2022", ulasan=92, gambar=r"Gambar\EldenRing.png")
+        g12 = Game("G012", "Cyberpunk 2077", 549000, "Aksi", cdpr,
+                "RPG aksi dunia terbuka di Night City. Jadi V, tentara bayaran "
+                "yang mengejar implan yang menjanjikan keabadian.",
+                diskon=50, rilis="2020", ulasan=82, gambar=r"Gambar\Cyberpunk2077.png")
+=======
+        g1 = Game("G001", "Counter Strike 2", 549000, "RPG", nova,
+               "Tembak-menembak taktis legendaris. Bergabunglah dalam pertempuran tim dengan mekanik smoke dinamis dan sub-tick rate presisi",
+                diskon=25, rilis="2025", ulasan=94,gambar=r"Gambar\cs2.png")
+        g2 = Game("G002", "Need for Speed Unbound", 399000, "Balapan", barn,
+               "Balapan liar jalanan dengan gaya seni grafiti anime yang unik, kustomisasi mobil mendalam, dan kejar-kejaran polisi yang menegangkan.",
+                diskon=40, rilis="2026", ulasan=88,gambar=r"Gambar\nfs_ounbond.png")
+        g3 = Game("G003", "Age of Empires IV", 299000, "Strategi", iron,
+               "Pimpin peradaban bersejarah menuju kejayaan melalui perang abad pertengahan, diplomasi, dan manajemen kerajaan.",
+                rilis="2024", ulasan=91,gambar=r"Gambar\aoe4.png")
+        g4 = Game("G004", "Resident Evil 4", 249000, "Horor", lantern,
+               "Misi penyelamatan menegangkan di desa terpencil yang terinfeksi wabah parasit mematikan.",
+                diskon=50, rilis="2025", ulasan=86,gambar=r"Gambar\re4.png")
+        g5 = Game("G005", "Stardew Valley", 115000, "Indie", barn,
+                "Warisi kebun tua kakekmu, pelajari cara hidup dari tanah, dan ubah ladang terbengkalai menjadi rumah yang makmur.",
+                diskon=20, rilis="2016", ulasan=98, gambar=r"Gambar\stardew_valley.png")
+        g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", nova,
+               "Aksi hack-and-slash di kota melayang, dengan combo tanpa batas dan bos raksasa.",
+               diskon=15, rilis="2026", ulasan=90,gambar=r"Gambar\Rdr2.png")
+        g7 = Game("G007", "Void Raiders", 459000, "Tembak", iron,
+               "Shooter co-op 4 pemain: rebut kapal alien terbengkalai dan bawa pulang hartanya.",
+               diskon=30, rilis="2026", ulasan=84)
+        g8 = Game("G008", "Mythic Tactics", 349000, "Strategi", iron,
+               "Strategi turn-based dengan pasukan mitologi dan pohon skill yang dalam.",
+                diskon=20, rilis="2025", ulasan=89)
+        g9 = Game("G009", "Drift Kings", 279000, "Balapan", barn,
+               "Arcade racing kompetitif online. Naik peringkat dan jadi raja drift.",
+                rilis="2024", ulasan=82)
+        g10 = Game("G010", "Last Signal", 219000, "Horor", lantern,
+                "Horor survival di stasiun radio terpencil. Sinyal terakhir bukan dari manusia.",
+                 diskon=35, rilis="2024", ulasan=87)
+>>>>>>> a53d513 (git push origin mainfeat: simpan progress kerjaanku sendiri)
         g11 = Game("G011", "Tiny Kingdoms", 99000, "Indie", barn,
                 "Kerajaan mungil, keputusan besar. Puzzle-strategi singkat yang bikin ketagihan.",
                 diskon=10, rilis="2023", ulasan=93)
         g12 = Game("G012", "Blade of Ashes", 649000, "Aksi", nova,
                 "Samurai di dunia pasca-perang: duel presisi, cerita kelam, visual memukau.",
                  rilis="2026", ulasan=92)
+<<<<<<< HEAD
+=======
+>>>>>>> 193f4d9 (feat: simpan progress kerjaanku sendiri)
+>>>>>>> a53d513 (git push origin mainfeat: simpan progress kerjaanku sendiri)
 
         d1 = DLC("D001", "Elden Ring: Shadow of the Erdtree", 279000, g11,
                  "Ekspansi resmi: masuki Realm of Shadow, hadapi bos baru, "
