@@ -653,11 +653,13 @@ class TokoGame:
         lantern = Seller("S003", "Lantern Works", "hi@lantern.id", "081200000003", "Surabaya", 4.6)
         barn = Seller("S004", "Pixel Barn", "hi@pixelbarn.id", "081200000004", "Yogyakarta", 4.9)
         resmi = Seller("S000", "BestDeal Official", "cs@bestdeal.id", "081200000000", "Jakarta", 5.0)
-        rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
-        crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
+        bandai = Seller("S005", "Bandai Namco", "cs@bandainamco.id", "081200000005", "Tokyo", 4.7)
+        cdpr = Seller("S006", "CD PROJEKT RED", "cs@cdprojektred.id", "081200000006", "Warsaw", 4.5)
         sega = Seller("S007", "SEGA", "hi@sega.id", "081200000007", "Tokyo", 4.6)
         xbox = Seller("S008", "Xbox Game Studios", "hi@xboxgamestudios.id", "081200000008", "Redmond", 4.8)
         capcom = Seller("S009", "Capcom", "hi@capcom.id", "081200000009", "USA", 4.7)
+        rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
+        crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
 
         g1 = Game("G001", "Eclipse Warden", 549000, "RPG", nova,
                "RPG dunia terbuka: jadi penjaga terakhir kerajaan saat gerhana abadi menelan langit.",
@@ -696,18 +698,20 @@ class TokoGame:
                 "Samurai di dunia pasca-perang: duel presisi, cerita kelam, visual memukau.",
                  rilis="2026", ulasan=92)
 
-        d1 = DLC("D001", "Eclipse Warden: Shadow Realm", 189000, g1,
-                 "Ekspansi wilayah baru, 12 jam cerita tambahan, dan senjata legendaris.",
-                 )
-        d2 = DLC("D002", "Neon Circuit: Turbo Pack", 99000, g2,
-                 "10 mobil baru, 4 trek malam hari, dan kustomisasi neon ekstra.",
-                 )
-        b1 = Bundle("B001", "Paket Horor Malam", [g4, g10], resmi,
-                    "Dua game horor sekaligus dengan harga hemat. Jangan main sendirian.",
-                    )
-        b2 = Bundle("B002", "Paket Strategi Raja", [g3, g8], resmi,
-                    "Dua strategi terbaik dalam satu paket untuk para ahli taktik.",
-                    )
+        d1 = DLC("D001", "Elden Ring: Shadow of the Erdtree", 279000, g11,
+                 "Ekspansi resmi: masuki Realm of Shadow, hadapi bos baru, "
+                 "dan temukan senjata serta kelas baru.",
+                 gambar=r"Gambar\ShadowOfTheErdtree.png")
+        d2 = DLC("D002", "Cyberpunk 2077: Phantom Liberty", 369000, g12,
+                 "Spionase thriller di distrik Dogtown. Misi baru, "
+                 "senjata baru, dan cerita bertabur bintang.",
+                 gambar=r"Gambar\PhantomLiberty.png")
+        b1 = Bundle("B001", "Paket RPG Legendaris", [g11, g12], resmi,
+                    "Elden Ring dan Cyberpunk 2077 dalam satu paket hemat.",
+                    gambar=r"Gambar\EldenRing.png")
+        b2 = Bundle("B002", "Paket Aksi Dunia Terbuka", [g12, g6], resmi,
+                    "Cyberpunk 2077 dan Red Dead Redemption 2 dalam satu paket hemat.",
+                    gambar=r"Gambar\Rdr2.png")
 
         self.__katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, d1, d2, b1, b2]
         self.__unggulan = [g1, g2, g6, g7, g12]
