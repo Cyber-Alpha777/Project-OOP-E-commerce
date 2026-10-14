@@ -653,8 +653,11 @@ class TokoGame:
         lantern = Seller("S003", "Lantern Works", "hi@lantern.id", "081200000003", "Surabaya", 4.6)
         barn = Seller("S004", "Pixel Barn", "hi@pixelbarn.id", "081200000004", "Yogyakarta", 4.9)
         resmi = Seller("S000", "BestDeal Official", "cs@bestdeal.id", "081200000000", "Jakarta", 5.0)
-
-        
+        rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
+        crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
+        sega = Seller("S007", "SEGA", "hi@sega.id", "081200000007", "Tokyo", 4.6)
+        xbox = Seller("S008", "Xbox Game Studios", "hi@xboxgamestudios.id", "081200000008", "Redmond", 4.8)
+        capcom = Seller("S009", "Capcom", "hi@capcom.id", "081200000009", "USA", 4.7)
 
         g1 = Game("G001", "Eclipse Warden", 549000, "RPG", nova,
                "RPG dunia terbuka: jadi penjaga terakhir kerajaan saat gerhana abadi menelan langit.",
@@ -671,21 +674,21 @@ class TokoGame:
         g5 = Game("G005", "Pixel Harvest", 129000, "Indie", barn,
                "Simulasi bertani santai bergaya pixel art. Tanam, panen, dan dekor rumahmu.",
                rilis="2023", ulasan=97)
-        g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", nova,
-               "Aksi hack-and-slash di kota melayang, dengan combo tanpa batas dan bos raksasa.",
-               diskon=15, rilis="2026", ulasan=90,gambar=r"Gambar\Rdr2.png")
-        g7 = Game("G007", "Void Raiders", 459000, "Tembak", iron,
-               "Shooter co-op 4 pemain: rebut kapal alien terbengkalai dan bawa pulang hartanya.",
-               diskon=30, rilis="2026", ulasan=84)
-        g8 = Game("G008", "Mythic Tactics", 349000, "Strategi", iron,
-               "Strategi turn-based dengan pasukan mitologi dan pohon skill yang dalam.",
-                diskon=20, rilis="2025", ulasan=89)
-        g9 = Game("G009", "Drift Kings", 279000, "Balapan", barn,
-               "Arcade racing kompetitif online. Naik peringkat dan jadi raja drift.",
-                rilis="2024", ulasan=82)
-        g10 = Game("G010", "Last Signal", 219000, "Horor", lantern,
-                "Horor survival di stasiun radio terpencil. Sinyal terakhir bukan dari manusia.",
-                 diskon=35, rilis="2024", ulasan=87)
+        g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", rockstar,
+               "Arthur Morgan and the Van der Linde Gang are outlaws on the run. With federal agents and bounty hunters massing on their heels, the gang must rob, steal, and fight their way across the rugged heartland in order to survive.",
+               diskon=15, rilis="December 5, 2019", ulasan=90,gambar=r"Gambar\Rdr2.png")
+        g7 = Game("G007", "Rise of the Tomb Raider", 459000, "Petualangan", crystaldynamic,
+               "Rise of the Tomb Raider: 20 Year Celebration includes the base game and Season Pass featuring all-new content. Explore Croft Manor in the new “Blood Ties” story, then defend it against a zombie invasion in Lara Nightmare.",
+               diskon=30, rilis="January 28, 2016", ulasan=84,gambar=r"Gambar\TombRaider.png")
+        g8 = Game("G008", "Total War Three Kingdoms", 349000, "Strategi", sega,
+               "Unite Ancient China under your rule through a thrilling blend of turn-based empire building and real-time battles. Use the Guanxi System and diplomacy to forge alliances, and build powerful armies with hundreds of unique infantry, cavalry and war machine units.",
+                diskon=20, rilis="23 May, 2019", ulasan=89, gambar=r"Gambar\TotalWar.png")
+        g9 = Game("G009", "Forza Horizon 6", 879000, "Balapan", xbox,
+               "Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing Legend in Forza Horizon's biggest open world driving adventure yet.",
+                rilis="19 May, 2026", ulasan=82,gambar=r"Gambar\Forza.png")
+        g10 = Game("G010", "Resident Evil Requiem", 819000, "Horor", capcom,
+                "Requiem for the dead. Nightmare for the living. Prepare to escape death in a heart-stopping experience that will chill you to your core.",
+                 diskon=35, rilis="27 Feb, 2026", ulasan=87,gambar=r"Gambar\ResidentEvil.png")
         g11 = Game("G011", "Tiny Kingdoms", 99000, "Indie", barn,
                 "Kerajaan mungil, keputusan besar. Puzzle-strategi singkat yang bikin ketagihan.",
                 diskon=10, rilis="2023", ulasan=93)
@@ -728,7 +731,7 @@ class TokoGame:
         return list(self.__riwayat)
 
     def daftar_kategori(self):
-        urut = ["Semua", "Aksi", "RPG", "Strategi", "Balapan", "Horor", "Indie", "Tembak",
+        urut = ["Semua", "Aksi", "RPG", "Strategi", "Balapan", "Horor", "Indie", "Tembak", "Petualangan",
                 "DLC", "Paket"]
         return urut
 
