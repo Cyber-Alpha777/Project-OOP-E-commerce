@@ -13,15 +13,16 @@ class TokoGame:
     Satu objek TokoGame mewakili satu sesi belanja seorang customer.
     Katalog dipakai bersama (shared) oleh semua sesi.
     """
-    METODE = DAFTAR_METODE      # nama metode -> kelas Pembayaran (daftar lengkap ada di models)
+    METODE = DAFTAR_METODE
 
-    def __init__(self, customer, katalog, unggulan):
+    def __init__(self, customer, katalog, unggulan, laporan=None):
         self.__customer = customer
-        self.__riwayat = []         # list (Pesanan, Pembayaran, Pengiriman)
+        self.__riwayat = []         
         self.__no = 0
         self.__katalog = katalog
         self.__unggulan = unggulan
-
+        self.__laporan = laporan  
+        
     def get_customer(self):
         return self.__customer
 
@@ -78,4 +79,6 @@ class TokoGame:
                                 "Pengiriman Digital", 0, "Instan")
         pengiriman.ubah_status("Terkirim")
         self.__riwayat.append((pesanan, pembayaran, pengiriman))
+        if self.__laporan is not None:      # untuk statistik seller
+            self.__laporan.catat(produk, self.__customer.get_id_user())
         return True, "Pembelian berhasil!", pengiriman

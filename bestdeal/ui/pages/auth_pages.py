@@ -3,7 +3,7 @@
 import tkinter as tk
 from abc import abstractmethod
 
-from bestdeal.data.katalog_demo import DEMO_EMAIL, DEMO_PASSWORD
+from bestdeal.data.katalog_demo import DEMO_EMAIL, DEMO_PASSWORD,AKUN_SELLER_DEMO,DEMO_SELLER_PASSWORD
 from bestdeal.ui.pages.base import Halaman
 from bestdeal.ui.tema import Tema
 from bestdeal.ui.widgets import ScrollFrame, TombolFlat
@@ -91,26 +91,37 @@ class LoginPage(AuthPageBase):
 
         demo = tk.Frame(kartu, bg=Tema.CHIP)
         demo.pack(fill="x", pady=(22, 0))
-        tk.Label(demo, text="Akun demo", fg=Tema.TEKS, bg=Tema.CHIP,
+        tk.Label(demo, text="Akun demo Customer", fg=Tema.TEKS, bg=Tema.CHIP,
                  font=(Tema.FONT, 9, "bold")).pack(anchor="w", padx=14, pady=(10, 0))
         tk.Label(demo, text=f"{DEMO_EMAIL}  \u2022  {DEMO_PASSWORD}", fg=Tema.REDUP, bg=Tema.CHIP,
                  font=("Consolas", 9)).pack(anchor="w", padx=14)
-        TombolFlat(demo, "Isi otomatis", self._isi_demo, bg=Tema.KARTU, fg=Tema.TEKS,
+        TombolFlat(demo, "Isi otomatis", self._isi_demo_cust, bg=Tema.KARTU, fg=Tema.TEKS,
+                 font=(Tema.FONT, 9, "bold"), padx=12, pady=5).pack(anchor="w", padx=14, pady=10)
+        tk.Label(demo, text="Akun Seller", fg=Tema.TEKS, bg=Tema.CHIP,
+                 font=(Tema.FONT, 9, "bold")).pack(anchor="w", padx=14, pady=(10, 0))
+        tk.Label(demo, text=f"{AKUN_SELLER_DEMO}  \u2022  {DEMO_SELLER_PASSWORD}", fg=Tema.REDUP, bg=Tema.CHIP,
+                 font=("Consolas", 9)).pack(anchor="w", padx=14)
+        TombolFlat(demo, "Isi otomatis", self._isi_demo_seller, bg=Tema.KARTU, fg=Tema.TEKS,
                    font=(Tema.FONT, 9, "bold"), padx=12, pady=5).pack(anchor="w", padx=14, pady=10)
         self._email.focus_set()
 
-    def _isi_demo(self):
+    def _isi_demo_cust(self):
         for e, teks in ((self._email, DEMO_EMAIL), (self._sandi, DEMO_PASSWORD)):
             e.delete(0, "end")
             e.insert(0, teks)
 
+    def _isi_demo_seller(self):
+        for e, teks in ((self._email, AKUN_SELLER_DEMO), (self._sandi, DEMO_SELLER_PASSWORD)):
+            e.delete(0, "end")
+            e.insert(0, teks)
+
     def _kirim(self):
-        ok, pesan, customer = self._app.auth.masuk(self._email.get(), self._sandi.get())
+        ok, pesan, user = self._app.auth.masuk(self._email.get(), self._sandi.get())
         if not ok:
             self._galat.configure(text=pesan)
             self._sandi.delete(0, "end")
             return
-        self._app.masuk_toko(customer)
+        self._app.masuk(user)  
 
 
 class DaftarPage(AuthPageBase):

@@ -1,5 +1,8 @@
 """Data demo toko: katalog produk + akun demo."""
 
+import random
+from datetime import date, timedelta
+
 from bestdeal.models.produk import Bundle, DLC, Game
 from bestdeal.models.user import Customer, Seller
 
@@ -8,18 +11,21 @@ DEMO_EMAIL = "arya@email.com"
 DEMO_PASSWORD = "password123"
 
 
+DEMO_SELLER_PASSWORD = "seller123"
+AKUN_SELLER_DEMO = "hi@capcom.id"
+
 def buat_katalog_demo():
-    """Bangun katalog demo. Return (katalog, unggulan, library_awal)."""
+    """Bangun katalog demo. Return (katalog, unggulan, library_awal, akun_seller)."""
     Valve = Seller("S001", "Valve", "hi@valve.id", "081200000001", "USA", 4.8)
     ParadoxInteractive = Seller("S002", "Paradox Interactive", "hi@ParadoxInteractive.id", "081200000002", "Stockholm", 4.6)
-    lantern = Seller("S003", "Lantern Works", "hi@lantern.id", "081200000003", "Surabaya", 4.6)
     ea = Seller("S004", "Ea", "hi@ea.id", "081200000004", "USA", 4.9)
     resmi = Seller("S000", "BestDeal Official", "cs@bestdeal.id", "081200000000", "Jakarta", 5.0)
     bandai = Seller("S005", "Bandai Namco", "cs@bandainamco.id", "081200000005", "Tokyo", 4.7)
     cdpr = Seller("S006", "CD PROJEKT RED", "cs@cdprojektred.id", "081200000006", "Warsaw", 4.5)
     sega = Seller("S007", "SEGA", "hi@sega.id", "081200000007", "Tokyo", 4.6)
     xbox = Seller("S008", "Xbox Game Studios", "hi@xboxgamestudios.id", "081200000008", "Redmond", 4.8)
-    capcom = Seller("S009", "Capcom", "hi@capcom.id", "081200000009", "USA", 4.7)
+    capcom = Seller("S009", "Capcom", "hi@capcom.id", "081200000009", "USA", 4.7,
+                    password=DEMO_SELLER_PASSWORD)
     rockstar = Seller("S010", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
     crystaldynamic = Seller("S011", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
     ConcernedApe = Seller("S012", "ConcernedApe", "hi@concernedape.id", "081200000006", "USA", 4.4)
@@ -93,9 +99,10 @@ def buat_katalog_demo():
 
     katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13, g14, g15, g16, d1, d2, b1, b2]
     unggulan = [g2, g4, g12, g14]
-    # game yang sudah dimiliki akun demo (produk, jam main)
+
     library_awal = [(g3, 42.5), (g5, 18.0), (g9, 7.5)]
-    return katalog, unggulan, library_awal
+    akun_seller = [capcom]
+    return katalog, unggulan, library_awal, akun_seller
 
 
 def buat_customer_demo(library_awal):
@@ -106,3 +113,15 @@ def buat_customer_demo(library_awal):
         customer.tambah_ke_library(game)
         customer.tambah_jam_main(game, jam)
     return customer
+
+
+def buat_penjualan_demo(katalog, laporan, hari=14, seed=2026):
+    """Isi laporan dengan penjualan SIMULASI selama `hari` hari terakhir agar dashboard seller
+    tidak kosong saat demo. Hapus pemanggilannya di app.py kalau statistik harus mulai dari nol.
+    """
+    acak = random.Random(seed)
+    hari_ini = date.today()
+    for produk in katalog:
+        jumlah = acak.randint(4, 36) if produk.bisa_dimainkan() else acak.randint(1, 9)
+        for _ in range(jumlah):
+            laporan.catat(produk, "DEMO", hari_ini - timedelta(days=acak.randint(0, hari - 1)))

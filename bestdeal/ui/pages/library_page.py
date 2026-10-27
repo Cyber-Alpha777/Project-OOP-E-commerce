@@ -102,7 +102,7 @@ class LibraryPage(Halaman):
         tk.Label(isi, text=g.get_deskripsi(), fg=Tema.TEKS, bg=Tema.BG, justify="left",
                  wraplength=lebar, font=(Tema.FONT, 11)).pack(anchor="w", padx=32, pady=(0, 14))
         info = (f"Waktu bermain : {customer.get_jam_main(g):.1f} jam\n"
-                f"Ulasan        : {g.get_ulasan()}% positif\n"
+                f"Ulasan        : {g.teks_ulasan()}\n"
                 f"Publisher     : {g.nama_publisher()}  (★ {g.get_seller().get_rating()})")
         tk.Label(isi, text=info, fg=Tema.REDUP, bg=Tema.PANEL, justify="left",
                  font=("Consolas", 10), padx=16, pady=12).pack(anchor="w", padx=32)

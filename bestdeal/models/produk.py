@@ -105,6 +105,21 @@ class Produk(ABC):
         """Info khusus tipe produk; di-override subclass."""
         return ""
 
+    def skor_ulasan(self):
+        """Persentase ulasan positif, atau None kalau belum ada ulasan."""
+        return None
+
+    def teks_ulasan(self):
+        skor = self.skor_ulasan()
+        return f"{skor}% positif" if skor is not None else "Belum ada ulasan"
+
+    def rincian_pendapatan(self, nominal):
+        """Bagi pendapatan satu penjualan: [(produk, nominal)] untuk laporan seller.
+
+        Default: seluruhnya untuk produk ini. Bundle meng-override (Polymorphism).
+        """
+        return [(self, nominal)]
+
     def dimiliki_oleh(self, customer):
         return customer.punya(self)
 
@@ -129,6 +144,9 @@ class Game(Produk):
 
     def get_ulasan(self):
         return self.__ulasan
+
+    def skor_ulasan(self):
+        return self.__ulasan if self.__ulasan > 0 else None     # 0 = belum ada ulasan
 
     def label_tipe(self):
         return "Game"
@@ -167,7 +185,7 @@ class DLC(Produk):
         return f"Butuh game: {self.__game_induk.get_nama_produk()}"
 
     def harga_akhir(self):
-        return self.get_harga()          # DLC tidak kena diskon
+        return self.get_harga()        
 
     def bisa_dibeli_oleh(self, customer):
         if customer.punya(self):
@@ -208,6 +226,20 @@ class Bundle(Produk):
 
     def dimiliki_oleh(self, customer):
         return all(customer.punya(g) for g in self.__daftar_game)
+
+    def rincian_pendapatan(self, nominal):
+        """Pendapatan paket dibagi ke game isinya, sebanding dengan harga_akhir masing-masing."""
+        game = self.__daftar_game
+        bobot = [g.harga_akhir() for g in game]
+        total = sum(bobot)
+        if total <= 0:
+            bobot, total = [1] * len(game), len(game)
+        hasil, sisa = [], nominal
+        for i, g in enumerate(game):
+            bagian = sisa if i == len(game) - 1 else nominal * bobot[i] // total
+            hasil.append((g, bagian))
+            sisa -= bagian
+        return hasil
 
     def bisa_dibeli_oleh(self, customer):
         if self.dimiliki_oleh(customer):

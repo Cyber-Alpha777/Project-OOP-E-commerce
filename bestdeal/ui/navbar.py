@@ -103,3 +103,55 @@ class NavBarTamu(tk.Frame):
 
     def set_aktif(self, kunci):
         pass
+
+
+class NavBarSeller(tk.Frame):
+    """Navbar untuk seller yang sudah login: Dashboard, Upload Game, nama toko, Keluar."""
+    MENU = (("dashboard", "DASHBOARD"), ("upload", "UPLOAD GAME"))
+
+    def __init__(self, parent, app):
+        super().__init__(parent, bg=Tema.NAV, height=72)
+        self.pack_propagate(False)
+        self._app = app
+
+        buat_logo(self)
+
+        self._item = {}
+        for kunci, teks in self.MENU:
+            f = tk.Frame(self, bg=Tema.NAV)
+            f.pack(side="left", fill="y", padx=4)
+            lb = tk.Label(f, text=teks, bg=Tema.NAV, font=(Tema.FONT, 10, "bold"), padx=12,
+                          cursor="hand2")
+            lb.pack(expand=True)
+            garis = tk.Frame(f, bg=Tema.NAV, height=3)
+            garis.pack(fill="x", side="bottom")
+            self._item[kunci] = (lb, garis)
+            lb.bind("<Button-1>", lambda e, k=kunci: self._app.buka(k))
+        self.set_aktif(None)
+
+        self._avatar = tk.Canvas(self, width=40, height=40, bg=Tema.NAV, highlightthickness=0)
+        TombolFlat(self, "Keluar", self._app.keluar, bg=Tema.CHIP, fg="#4a3d33",
+                   font=(Tema.FONT, 9, "bold"), padx=14, pady=6).pack(side="right", padx=(8, 32))
+        self._avatar.pack(side="right", padx=(12, 8))
+        self._toko = tk.Label(self, fg="#9a3d00", bg="#fff1e4", padx=12, pady=5,
+                              font=(Tema.FONT, 10, "bold"))
+        self._toko.pack(side="right", padx=8)
+        self.perbarui()
+
+    def perbarui(self):
+        s = self._app.seller.get_seller()
+        self._toko.configure(text=f"{s.get_nama_toko()}  \u2022  Seller  \u2022  \u2605 {s.get_rating()}")
+        a = self._avatar
+        a.delete("all")
+        a.create_oval(2, 2, 38, 38, fill=Tema.TEKS, outline="")
+        a.create_text(20, 20, text=s.get_nama_toko()[:1].upper(), fill="#ffffff",
+                      font=(Tema.FONT, 13, "bold"))
+
+    def set_aktif(self, kunci):
+        for k, (lb, garis) in self._item.items():
+            if k == kunci:
+                lb.configure(fg=Tema.TEKS)
+                garis.configure(bg=Tema.aksen)
+            else:
+                lb.configure(fg=Tema.REDUP)
+                garis.configure(bg=Tema.NAV)

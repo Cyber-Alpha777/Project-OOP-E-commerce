@@ -3,17 +3,22 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from bestdeal.data.katalog_demo import buat_customer_demo, buat_katalog_demo
+from bestdeal.data.katalog_demo import (buat_customer_demo, buat_katalog_demo,
+                                        buat_penjualan_demo)
 from bestdeal.services.auth import AuthService
 from bestdeal.services.pengaturan import Pengaturan
+from bestdeal.services.penjualan import LaporanPenjualan
+from bestdeal.services.seller import LayananSeller
 from bestdeal.services.toko import TokoGame
 from bestdeal.ui.dialogs import DialogProduk
-from bestdeal.ui.navbar import NavBar, NavBarTamu
+from bestdeal.ui.navbar import NavBar, NavBarSeller, NavBarTamu
 from bestdeal.ui.pages.akun_page import AkunPage
 from bestdeal.ui.pages.auth_pages import DaftarPage, LoginPage
 from bestdeal.ui.pages.home_page import HomePage
 from bestdeal.ui.pages.landing_page import LandingPage
 from bestdeal.ui.pages.library_page import LibraryPage
+from bestdeal.ui.pages.seller_dashboard_page import SellerDashboardPage
+from bestdeal.ui.pages.seller_upload_page import SellerUploadPage
 from bestdeal.ui.pages.setting_page import SettingPage
 from bestdeal.ui.pages.dompet_page import DompetPage
 from bestdeal.ui.tema import Tema
@@ -25,6 +30,7 @@ class AplikasiBestDeal:
     HALAMAN_TAMU = {"landing": LandingPage, "login": LoginPage, "daftar": DaftarPage}
     HALAMAN_MEMBER = {"home": HomePage, "library": LibraryPage, "akun": AkunPage,
                       "setting": SettingPage, "dompet": DompetPage}
+    HALAMAN_SELLER = {"dashboard": SellerDashboardPage, "upload": SellerUploadPage}
 
     def __init__(self):
         self.root = tk.Tk()
@@ -40,10 +46,13 @@ class AplikasiBestDeal:
         self._lebar = sw
         self._after_resize = None
 
-        self.katalog, self.unggulan, library_awal = buat_katalog_demo()
-        self.auth = AuthService([buat_customer_demo(library_awal)])
+        self.katalog, self.unggulan, library_awal, akun_seller = buat_katalog_demo()
+        self.auth = AuthService([buat_customer_demo(library_awal)], akun_seller)
+        self.laporan = LaporanPenjualan()       # buku besar penjualan, dipakai semua sesi
+        buat_penjualan_demo(self.katalog, self.laporan)     # data simulasi awal (hapus = mulai nol)
         self.pengaturan = Pengaturan()
-        self.toko = None            # TokoGame milik customer yang sedang login (None = tamu)
+        self.toko = None            # TokoGame milik customer yang sedang login (None = bukan customer)
+        self.seller = None          # LayananSeller milik seller yang sedang login (None = bukan seller)
         self._sesi_toko = {}        # id customer -> TokoGame (riwayat tetap ada setelah keluar-masuk)
         self._gaya()
 
@@ -96,9 +105,14 @@ class AplikasiBestDeal:
     def _bangun_ui_member(self, awal="home"):
         self._bangun_ui(NavBar, self.HALAMAN_MEMBER, awal)
 
+    def _bangun_ui_seller(self, awal="dashboard"):
+        self._bangun_ui(NavBarSeller, self.HALAMAN_SELLER, awal)
+
     def bangun_ulang(self, awal="home"):
         """Bangun ulang seluruh UI (mis. setelah ganti warna aksen)."""
-        if self.toko is None:
+        if self.seller is not None:
+            self._bangun_ui_seller(awal if awal in self.HALAMAN_SELLER else "dashboard")
+        elif self.toko is None:
             self._bangun_ui_tamu(awal if awal in self.HALAMAN_TAMU else "landing")
         else:
             self._bangun_ui_member(awal if awal in self.HALAMAN_MEMBER else "home")
@@ -126,18 +140,29 @@ class AplikasiBestDeal:
         self.tampilkan_login(pesan)
 
     # ---------- masuk / keluar ----------
+    def masuk(self, user):
+        """Arahkan user yang baru login ke tampilan sesuai perannya."""
+        {"Customer": self.masuk_toko, "Publisher": self.masuk_seller}[user.peran()](user)
+
     def masuk_toko(self, customer):
         kunci = customer.get_id_user()
         if kunci not in self._sesi_toko:
-            self._sesi_toko[kunci] = TokoGame(customer, self.katalog, self.unggulan)
+            self._sesi_toko[kunci] = TokoGame(customer, self.katalog, self.unggulan, self.laporan)
         self.toko = self._sesi_toko[kunci]
+        self.seller = None
         self._bangun_ui_member("home")
+
+    def masuk_seller(self, seller):
+        self.toko = None
+        self.seller = LayananSeller(seller, self.katalog, self.laporan)
+        self._bangun_ui_seller("dashboard")
 
     def keluar(self):
         if not messagebox.askyesno("Keluar", "Keluar dari akun BestDeal?", parent=self.root):
             return
         self.auth.keluar()
         self.toko = None
+        self.seller = None
         self._bangun_ui_tamu("landing")
 
     # ---------- navigasi ----------

@@ -172,7 +172,7 @@ class HomePage(Halaman):
         tk.Label(kiri, text=p.get_nama_produk(), fg=Tema.TEKS, bg=Tema.KARTU,
                  font=(Tema.FONT, 15, "bold")).pack(anchor="w")
         tk.Label(kiri, text=f"{p.get_kategori()}  •  {p.nama_publisher()}  •  "
-                            f"{p.get_ulasan()}% positif",
+                            f"{p.teks_ulasan()}",
                  fg=Tema.REDUP, bg=Tema.KARTU, font=(Tema.FONT, 9)).pack(anchor="w")
         baris_harga(self._info, p, self._app.toko.get_customer(), Tema.KARTU, 12).pack(
             side="right")

@@ -16,6 +16,10 @@ class User(ABC):
         self.__no_telepon = no_telepon
         self.__alamat = alamat
 
+    @staticmethod
+    def _hash(password):
+        return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
     # ==== Getter ====
     def get_id_user(self):
         return self.__id_user
@@ -76,11 +80,7 @@ class Customer(User):
     def peran(self):
         return "Customer"
 
-    # ==== Password ====
-    @staticmethod
-    def _hash(password):
-        return hashlib.sha256(password.encode("utf-8")).hexdigest()
-
+    # ==== Password (method _hash diwarisi dari User) ====
     def set_password(self, password):
         if len(password) >= 6:
             self.__password = self._hash(password)
@@ -140,10 +140,14 @@ class Customer(User):
 
 
 class Seller(User):
-    def __init__(self, id_seller, nama_toko, email, no_telepon, alamat, rating=5.0):
+    def __init__(self, id_seller, nama_toko, email, no_telepon, alamat, rating=5.0,
+                 password=None):
         super().__init__(id_seller, nama_toko, email, no_telepon, alamat)
         self.__nama_toko = nama_toko
         self.__rating = rating
+        self.__password = None      # seller tanpa password tidak bisa login
+        if password:
+            self.set_password(password)
 
     def peran(self):
         return "Publisher"
@@ -161,6 +165,14 @@ class Seller(User):
     def set_rating(self, rating):
         if 0 <= rating <= 5:
             self.__rating = rating
+
+    # ==== Password ====
+    def set_password(self, password):
+        if len(password) >= 6:
+            self.__password = self._hash(password)
+
+    def cek_password(self, password):
+        return self.__password is not None and self.__password == self._hash(password)
 
     # Method Overriding dari User
     def tampilkan_profil(self):
