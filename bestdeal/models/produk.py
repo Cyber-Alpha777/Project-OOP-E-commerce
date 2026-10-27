@@ -71,6 +71,9 @@ class Produk(ABC):
     def set_seller(self, seller):
         self.__seller = seller
 
+    def set_deskripsi(self, deskripsi):
+        self.__deskripsi = deskripsi.strip()
+
     def kurangi_stok(self, jumlah):
         if jumlah <= self.__stok:
             self.__stok -= jumlah
@@ -99,6 +102,10 @@ class Produk(ABC):
         return 0
 
     def bisa_dimainkan(self):
+        return False
+
+    def bisa_diedit(self):
+        """Produk yang infonya boleh diubah seller. Hanya Game (override di subclass)."""
         return False
 
     def info_tambahan(self):
@@ -144,6 +151,16 @@ class Game(Produk):
 
     def get_ulasan(self):
         return self.__ulasan
+
+    def bisa_diedit(self):
+        return True
+
+    def set_diskon(self, diskon):
+        if 0 <= diskon <= 100:
+            self.__diskon = diskon
+
+    def set_rilis(self, rilis):
+        self.__rilis = rilis
 
     def skor_ulasan(self):
         return self.__ulasan if self.__ulasan > 0 else None     # 0 = belum ada ulasan
