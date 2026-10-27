@@ -46,7 +46,7 @@ class DialogProduk(tk.Toplevel):
         kanan = tk.Frame(self, bg=Tema.PANEL, width=300)
         kanan.grid(row=0, column=1, padx=(12, 24), pady=24, sticky="ns")
         kanan.grid_propagate(False)
-        kanan.configure(height=tinggi_art + 150)
+        kanan.configure(height=tinggi_art + 200)
         tk.Label(kanan, text="Beli", fg=Tema.TEKS, bg=Tema.PANEL,
                  font=(Tema.FONT, 14, "bold")).pack(anchor="w", padx=20, pady=(20, 6))
         baris_harga(kanan, produk, customer, Tema.PANEL, 13).pack(anchor="w", padx=20)
@@ -61,15 +61,21 @@ class DialogProduk(tk.Toplevel):
             tk.Label(kanan, text="Metode pembayaran", fg=Tema.REDUP, bg=Tema.PANEL,
                      font=(Tema.FONT, 9)).pack(anchor="w", padx=20, pady=(16, 4))
             self._metode = tk.StringVar(value=list(toko.METODE)[0])
-            for nama in toko.METODE:
-                tk.Radiobutton(kanan, text=nama, value=nama, variable=self._metode,
+            grid_m = tk.Frame(kanan, bg=Tema.PANEL)
+            grid_m.pack(anchor="w", padx=14)
+            for i, nama in enumerate(toko.METODE):
+                tk.Radiobutton(grid_m, text=nama, value=nama, variable=self._metode,
                                command=self._hitung, bg=Tema.PANEL, fg=Tema.TEKS,
                                activebackground=Tema.PANEL, activeforeground=Tema.TEKS,
                                selectcolor=Tema.KARTU, highlightthickness=0, bd=0,
-                               font=(Tema.FONT, 10), cursor="hand2").pack(anchor="w", padx=18)
+                               font=(Tema.FONT, 10), cursor="hand2", anchor="w",
+                               width=13).grid(row=i // 2, column=i % 2, sticky="w")
+            self._catatan = tk.Label(kanan, text="", fg=Tema.REDUP, bg=Tema.PANEL,
+                                     justify="left", wraplength=260, font=(Tema.FONT, 9))
+            self._catatan.pack(anchor="w", padx=20, pady=(8, 0))
             self._rincian = tk.Label(kanan, text="", fg=Tema.TEKS, bg=Tema.PANEL, justify="left",
                                      font=("Consolas", 10))
-            self._rincian.pack(anchor="w", padx=20, pady=14)
+            self._rincian.pack(anchor="w", padx=20, pady=12)
             TombolFlat(kanan, "Beli Sekarang", self._beli, padx=26, pady=10).pack(
                 anchor="w", padx=20)
             self._hitung()
@@ -90,8 +96,16 @@ class DialogProduk(tk.Toplevel):
         kelas = toko.METODE[self._metode.get()]
         sub = self._produk.harga_akhir()
         admin = kelas.tarif_admin(sub)          # polymorphism
-        self._rincian.configure(text=f"Harga   : {rupiah(sub)}\nAdmin   : {rupiah(admin)}\n"
-                                     f"Total   : {rupiah(sub + admin)}")
+        total = sub + admin
+        teks = f"Harga   : {rupiah(sub)}\nAdmin   : {rupiah(admin)}\nTotal   : {rupiah(total)}"
+        catatan = kelas.catatan()
+        if not kelas.eksternal:                 # metode saldo: tampilkan sisa saldo
+            saldo = toko.get_customer().get_saldo()
+            teks += f"\nSaldo   : {rupiah(saldo)}"
+            if saldo < total:
+                catatan = "Saldo tidak cukup. Klik saldo di navbar untuk top up."
+        self._rincian.configure(text=teks)
+        self._catatan.configure(text=catatan)
 
     def _beli(self):
         app = self._app

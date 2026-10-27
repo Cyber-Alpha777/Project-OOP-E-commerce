@@ -3,6 +3,8 @@
 import hashlib
 from abc import ABC, abstractmethod
 
+from bestdeal.models.dompet import Mutasi
+
 
 class User(ABC):
     """Superclass abstrak. Tidak bisa di-instantiate langsung."""
@@ -65,6 +67,9 @@ class Customer(User):
         super().__init__(id_customer, nama, email, no_telepon, alamat)
         self.__password = self._hash(password)
         self.__saldo = saldo
+        self.__mutasi = []       # list Mutasi (riwayat dompet)
+        if saldo > 0:
+            self.__catat("Saldo Awal", "Saldo awal akun", saldo)
         self.__library = []      # list Produk yang sudah dibeli
         self.__jam_main = {}     # id_produk -> jam main
 
@@ -87,17 +92,26 @@ class Customer(User):
     def get_saldo(self):
         return self.__saldo
 
-    def tambah_saldo(self, jumlah):
+    def tambah_saldo(self, jumlah, keterangan="Top up saldo"):
         if jumlah > 0:
             self.__saldo += jumlah
+            self.__catat("Top Up", keterangan, jumlah)
             return True
         return False
 
-    def kurangi_saldo(self, jumlah):
+    def kurangi_saldo(self, jumlah, keterangan="Pembelian"):
         if 0 <= jumlah <= self.__saldo:
             self.__saldo -= jumlah
+            if jumlah > 0:
+                self.__catat("Pembelian", keterangan, -jumlah)
             return True
         return False
+
+    def get_mutasi(self):
+        return list(self.__mutasi)
+
+    def __catat(self, jenis, keterangan, jumlah):
+        self.__mutasi.append(Mutasi(jenis, keterangan, jumlah, self.__saldo))
 
     # ==== Library ====
     def get_library(self):

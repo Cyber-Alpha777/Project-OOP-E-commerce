@@ -15,6 +15,7 @@ from bestdeal.ui.pages.home_page import HomePage
 from bestdeal.ui.pages.landing_page import LandingPage
 from bestdeal.ui.pages.library_page import LibraryPage
 from bestdeal.ui.pages.setting_page import SettingPage
+from bestdeal.ui.pages.dompet_page import DompetPage
 from bestdeal.ui.tema import Tema
 from bestdeal.ui.widgets import ScrollFrame
 
@@ -23,7 +24,7 @@ class AplikasiBestDeal:
     # halaman yang tersedia sebelum dan sesudah login
     HALAMAN_TAMU = {"landing": LandingPage, "login": LoginPage, "daftar": DaftarPage}
     HALAMAN_MEMBER = {"home": HomePage, "library": LibraryPage, "akun": AkunPage,
-                      "setting": SettingPage}
+                      "setting": SettingPage, "dompet": DompetPage}
 
     def __init__(self):
         self.root = tk.Tk()

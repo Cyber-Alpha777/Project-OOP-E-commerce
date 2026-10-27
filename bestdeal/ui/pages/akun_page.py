@@ -62,9 +62,8 @@ class AkunPage(Halaman):
                  font=(Tema.FONT, 10)).pack(anchor="w", padx=20, pady=(0, 10))
         tp = tk.Frame(ks, bg=Tema.PANEL)
         tp.pack(anchor="w", padx=20, pady=(0, 14))
-        for n in (100_000, 500_000, 1_000_000):
-            TombolFlat(tp, f"+ {rupiah(n)}", lambda x=n: self._topup(x), pady=6,
-                       font=(Tema.FONT, 9, "bold")).pack(side="left", padx=(0, 8))
+        TombolFlat(tp, "Top Up / Kelola Dompet", lambda: self._app.buka("dompet"), pady=6,
+                   font=(Tema.FONT, 9, "bold")).pack(side="left")
         game = toko.library_game()
         total_jam = sum(c.get_jam_main(g) for g in game)
         tk.Label(ks, text=f"Game di library : {len(game)}\nTotal jam main  : {total_jam:.1f} jam\n"
@@ -97,8 +96,4 @@ class AkunPage(Halaman):
             messagebox.showwarning("Nama kosong", "Nama tidak boleh kosong.")
             return
         self._app.toko.get_customer().set_nama(nama)
-        self._app.refresh_semua()
-
-    def _topup(self, jumlah):
-        self._app.toko.get_customer().tambah_saldo(jumlah)
         self._app.refresh_semua()

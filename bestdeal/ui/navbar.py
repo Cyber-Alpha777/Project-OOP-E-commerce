@@ -26,9 +26,9 @@ def buat_logo(parent, saat_klik=None):
 
 
 class NavBar(tk.Frame):
-    """Navbar BestDeal setelah login. TOKO & LIBRARY bisa diklik; AKUN & SETTING masih tampilan saja."""
+    """Navbar BestDeal setelah login. Semua menu (TOKO, LIBRARY, AKUN, SETTING) bisa diklik; klik saldo untuk buka Dompet."""
     MENU = (("home", "TOKO"), ("library", "LIBRARY"), ("akun", "AKUN"), ("setting", "SETTING"))
-    BISA_DIKLIK = ("home", "library")
+    BISA_DIKLIK = ("home", "library", "akun", "setting")
 
     def __init__(self, parent, app):
         super().__init__(parent, bg=Tema.NAV, height=72)
@@ -58,6 +58,8 @@ class NavBar(tk.Frame):
         self._avatar.pack(side="right", padx=(12, 8))
         self._saldo = tk.Label(self, fg="#9a3d00", bg="#fff1e4", padx=12, pady=5,
                                font=(Tema.FONT, 10, "bold"))
+        self._saldo.configure(cursor="hand2")          # klik saldo -> halaman Dompet
+        self._saldo.bind("<Button-1>", lambda e: self._app.buka("dompet"))
         self._saldo.pack(side="right", padx=8)
         self.cari = InputCari(self, "Cari game, genre, publisher...", self._app.cari,
                               lebar=28, bg=Tema.CHIP)

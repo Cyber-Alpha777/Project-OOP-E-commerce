@@ -14,6 +14,7 @@ class Tema:
     REDUP = "#6b5d52"
     NONAKTIF = "#a8998c"
     HIJAU = "#1a8f4a"
+    MERAH = "#d92d20"
     DISKON_BG = "#ff7a1a"
     DISKON_FG = "#1c1410"
     AKSEN_TEKS = "#c2410c"

@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from bestdeal.models.pembayaran import PembayaranKartu, PembayaranQRIS, PembayaranSaldo
+from bestdeal.models.pembayaran import DAFTAR_METODE
 from bestdeal.models.pengiriman import Pengiriman
 from bestdeal.models.pesanan import Pesanan
 
@@ -13,11 +13,7 @@ class TokoGame:
     Satu objek TokoGame mewakili satu sesi belanja seorang customer.
     Katalog dipakai bersama (shared) oleh semua sesi.
     """
-    METODE = {
-        "Saldo BestDeal": PembayaranSaldo,
-        "QRIS": PembayaranQRIS,
-        "Kartu Kredit": PembayaranKartu,
-    }
+    METODE = DAFTAR_METODE      # nama metode -> kelas Pembayaran (daftar lengkap ada di models)
 
     def __init__(self, customer, katalog, unggulan):
         self.__customer = customer
