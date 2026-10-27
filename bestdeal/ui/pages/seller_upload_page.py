@@ -15,6 +15,12 @@ from bestdeal.ui.widgets import KartuProduk, ScrollFrame, TombolFlat
 class SellerUploadPage(Halaman):
     GALAT = "#b91c1c"
     LEBAR_PRATINJAU = 300
+    # teks + tujuan yang bisa diganti subclass (mis. SellerEditPage) -- Polymorphism
+    JUDUL = "Upload Game"
+    SUBJUDUL = "Isi detail game lalu publikasikan. Game langsung tampil di toko untuk semua customer."
+    TEKS_KIRIM = "Publikasikan Game"
+    TEKS_RESET = "Kosongkan form"
+    HALAMAN_SETELAH = "dashboard"
 
     def __init__(self, parent, app):
         super().__init__(parent, app)
@@ -40,19 +46,19 @@ class SellerUploadPage(Halaman):
         if self._after:
             self.after_cancel(self._after)
             self._after = None
-        self._cover = ""
+        self._cover = self._cover_awal()
         self.scroll.kosongkan()
         self.scroll.ke_atas()
         isi = self.scroll.isi
-        self.judul(isi, "Upload Game")
-        tk.Label(isi, text="Isi detail game lalu publikasikan. Game langsung tampil di toko "
-                           "untuk semua customer.", fg=Tema.REDUP, bg=Tema.BG,
+        self.judul(isi, self.JUDUL)
+        tk.Label(isi, text=self.SUBJUDUL, fg=Tema.REDUP, bg=Tema.BG,
                  font=(Tema.FONT, 10)).pack(anchor="w", padx=32, pady=(0, 14))
 
         badan = tk.Frame(isi, bg=Tema.BG)
         badan.pack(fill="x", padx=32, pady=(0, 28))
         badan.columnconfigure(0, weight=1)
-        form = tk.Frame(badan, bg=Tema.PANEL, padx=28, pady=22)
+        form = tk.Frame(badan, bg=Tema.PANEL, padx=28, pady=22,
+                        highlightthickness=1, highlightbackground=Tema.GARIS)
         form.grid(row=0, column=0, sticky="new", padx=(0, 18))
         kanan = tk.Frame(badan, bg=Tema.BG)
         kanan.grid(row=0, column=1, sticky="n")
@@ -146,10 +152,28 @@ class SellerUploadPage(Halaman):
         self._galat.pack(anchor="w", pady=(14, 0))
         tombol = tk.Frame(form, bg=Tema.PANEL)
         tombol.pack(fill="x", pady=(10, 0))
-        TombolFlat(tombol, "Publikasikan Game", self._kirim, padx=24, pady=11).pack(side="left")
-        TombolFlat(tombol, "Kosongkan form", self.bangun, bg=Tema.CHIP, fg=Tema.TEKS,
+        TombolFlat(tombol, self.TEKS_KIRIM, self._kirim, padx=24, pady=11).pack(side="left")
+        TombolFlat(tombol, self.TEKS_RESET, self.bangun, bg=Tema.CHIP, fg=Tema.TEKS,
                    padx=18, pady=11).pack(side="left", padx=10)
+        self._tombol_ekstra(tombol)
+        self._isi_awal()
         self._nama.focus_set()
+
+    # ---------- hook untuk subclass ----------
+    def _cover_awal(self):
+        return ""
+
+    def _isi_awal(self):
+        """Isi form dengan data awal (kosong untuk upload baru)."""
+
+    def _tombol_ekstra(self, tombol):
+        """Tombol tambahan di samping tombol kirim / reset."""
+
+    def _simpan(self):
+        """Kirim isi form ke service. Return (ok, pesan, game)."""
+        return self._app.seller.upload_game(
+            self._nama.get(), self._kategori.get(), self._harga.get(), self._diskon.get(),
+            self._rilis.get(), self._deskripsi.get("1.0", "end"), self._cover)
 
     def _susun_pratinjau(self, parent):
         tk.Label(parent, text="Pratinjau di toko", fg=Tema.TEKS, bg=Tema.BG,
@@ -196,22 +220,24 @@ class SellerUploadPage(Halaman):
 
     def _atur_cover(self, path):
         self._cover = path
+        self._tampil_cover()
+        self._pratinjau()
+
+    def _tampil_cover(self):
+        path = self._cover
         if path:
             self._nama_cover.configure(text=os.path.basename(path), fg=Tema.TEKS)
             self._hapus_cover.pack(side="left")
         else:
             self._nama_cover.configure(text="Belum dipilih (pakai placeholder)", fg=Tema.REDUP)
             self._hapus_cover.pack_forget()
-        self._pratinjau()
 
     # ---------- kirim ----------
     def _kirim(self):
-        ok, pesan, game = self._app.seller.upload_game(
-            self._nama.get(), self._kategori.get(), self._harga.get(), self._diskon.get(),
-            self._rilis.get(), self._deskripsi.get("1.0", "end"), self._cover)
+        ok, pesan, game = self._simpan()
         if not ok:
             self._galat.configure(text=pesan)
             return
         messagebox.showinfo("Berhasil", pesan, parent=self)
         self._app.refresh_semua()
-        self._app.buka("dashboard")
+        self._app.buka(self.HALAMAN_SETELAH)

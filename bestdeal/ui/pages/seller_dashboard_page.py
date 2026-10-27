@@ -2,6 +2,7 @@
 
 import tkinter as tk
 
+from bestdeal.ui.hias import kartu_statistik
 from bestdeal.ui.pages.base import Halaman
 from bestdeal.ui.tema import Tema
 from bestdeal.ui.widgets import ScrollFrame, TombolFlat, lukis_art
@@ -80,17 +81,12 @@ class SellerDashboardPage(Halaman):
         )
         grid = tk.Frame(isi, bg=Tema.BG)
         grid.pack(fill="x", padx=32, pady=(0, 18))
+        warna = ("#2563eb", "#16a34a", Tema.aksen, "#7c3aed")
         for i, (label, nilai, sub) in enumerate(item):
             grid.columnconfigure(i, weight=1, uniform="stat")
-            k = tk.Frame(grid, bg=Tema.PANEL)
-            k.grid(row=0, column=i, sticky="nsew",
-                   padx=(0 if i == 0 else 9, 0 if i == len(item) - 1 else 9))
-            tk.Label(k, text=label, fg=Tema.REDUP, bg=Tema.PANEL,
-                     font=(Tema.FONT, 10)).pack(anchor="w", padx=18, pady=(14, 0))
-            tk.Label(k, text=nilai, fg=Tema.TEKS, bg=Tema.PANEL,
-                     font=(Tema.FONT, 20, "bold")).pack(anchor="w", padx=18)
-            tk.Label(k, text=sub, fg=Tema.REDUP, bg=Tema.PANEL,
-                     font=(Tema.FONT, 9)).pack(anchor="w", padx=18, pady=(0, 14))
+            kartu_statistik(grid, label, nilai, sub, warna[i]).grid(
+                row=0, column=i, sticky="nsew",
+                padx=(0 if i == 0 else 9, 0 if i == len(item) - 1 else 9))
 
     # ---------- grafik batang pendapatan harian ----------
     def _grafik(self, isi, layanan, lebar):
@@ -203,7 +199,8 @@ class SellerDashboardPage(Halaman):
 
     # ---------- penjualan terbaru ----------
     def _terbaru(self, isi, layanan):
-        self.judul(isi, "Penjualan Terbaru", pad=(6, 10))
+        self.judul(isi, "Penjualan Terbaru", "Lihat semua \u2192",
+                   lambda: self._app.buka("penjualan"), pad=(6, 10))
         kartu = tk.Frame(isi, bg=Tema.KARTU, highlightthickness=1, highlightbackground=Tema.GARIS)
         kartu.pack(fill="x", padx=32, pady=(0, 18))
         baris = layanan.penjualan_terbaru(8)

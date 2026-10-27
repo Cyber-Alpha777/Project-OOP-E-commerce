@@ -8,7 +8,7 @@ from bestdeal.data.katalog_demo import (buat_customer_demo, buat_katalog_demo,
 from bestdeal.services.auth import AuthService
 from bestdeal.services.pengaturan import Pengaturan
 from bestdeal.services.penjualan import LaporanPenjualan
-from bestdeal.services.seller import LayananSeller
+from bestdeal.services.seller_kelola import LayananSellerLengkap
 from bestdeal.services.toko import TokoGame
 from bestdeal.ui.dialogs import DialogProduk
 from bestdeal.ui.navbar import NavBar, NavBarSeller, NavBarTamu
@@ -18,6 +18,9 @@ from bestdeal.ui.pages.home_page import HomePage
 from bestdeal.ui.pages.landing_page import LandingPage
 from bestdeal.ui.pages.library_page import LibraryPage
 from bestdeal.ui.pages.seller_dashboard_page import SellerDashboardPage
+from bestdeal.ui.pages.seller_edit_page import SellerEditPage
+from bestdeal.ui.pages.seller_kelola_page import SellerKelolaPage
+from bestdeal.ui.pages.seller_penjualan_page import SellerPenjualanPage
 from bestdeal.ui.pages.seller_upload_page import SellerUploadPage
 from bestdeal.ui.pages.setting_page import SettingPage
 from bestdeal.ui.pages.dompet_page import DompetPage
@@ -30,7 +33,9 @@ class AplikasiBestDeal:
     HALAMAN_TAMU = {"landing": LandingPage, "login": LoginPage, "daftar": DaftarPage}
     HALAMAN_MEMBER = {"home": HomePage, "library": LibraryPage, "akun": AkunPage,
                       "setting": SettingPage, "dompet": DompetPage}
-    HALAMAN_SELLER = {"dashboard": SellerDashboardPage, "upload": SellerUploadPage}
+    HALAMAN_SELLER = {"dashboard": SellerDashboardPage, "upload": SellerUploadPage,
+                      "kelola": SellerKelolaPage, "penjualan": SellerPenjualanPage,
+                      "edit": SellerEditPage}
 
     def __init__(self):
         self.root = tk.Tk()
@@ -154,7 +159,7 @@ class AplikasiBestDeal:
 
     def masuk_seller(self, seller):
         self.toko = None
-        self.seller = LayananSeller(seller, self.katalog, self.laporan)
+        self.seller = LayananSellerLengkap(seller, self.katalog, self.laporan)
         self._bangun_ui_seller("dashboard")
 
     def keluar(self):
@@ -178,6 +183,11 @@ class AplikasiBestDeal:
     def buka_library(self, game):
         self.buka("library")
         self.halaman["library"].pilih(game)
+
+    def buka_edit(self, game):
+        """Buka form edit untuk game milik seller yang sedang login."""
+        self.halaman["edit"].atur_game(game)
+        self.buka("edit")
 
     def buka_produk(self, produk):
         DialogProduk(self, produk)

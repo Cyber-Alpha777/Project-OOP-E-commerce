@@ -3,6 +3,8 @@
 import tkinter as tk
 from tkinter import messagebox
 
+from bestdeal.ui.dialog_bayar import DialogBayar, perlu_halaman_bayar
+from bestdeal.ui.hias import UbinMetode
 from bestdeal.ui.tema import Tema
 from bestdeal.ui.widgets import TombolFlat, baris_harga, lukis_art
 from bestdeal.utils import rupiah
@@ -46,7 +48,7 @@ class DialogProduk(tk.Toplevel):
         kanan = tk.Frame(self, bg=Tema.PANEL, width=300)
         kanan.grid(row=0, column=1, padx=(12, 24), pady=24, sticky="ns")
         kanan.grid_propagate(False)
-        kanan.configure(height=tinggi_art + 200)
+        kanan.configure(height=tinggi_art + 240)
         tk.Label(kanan, text="Beli", fg=Tema.TEKS, bg=Tema.PANEL,
                  font=(Tema.FONT, 14, "bold")).pack(anchor="w", padx=20, pady=(20, 6))
         baris_harga(kanan, produk, customer, Tema.PANEL, 13).pack(anchor="w", padx=20)
@@ -63,13 +65,13 @@ class DialogProduk(tk.Toplevel):
             self._metode = tk.StringVar(value=list(toko.METODE)[0])
             grid_m = tk.Frame(kanan, bg=Tema.PANEL)
             grid_m.pack(anchor="w", padx=14)
+            self._ubin = {}
             for i, nama in enumerate(toko.METODE):
-                tk.Radiobutton(grid_m, text=nama, value=nama, variable=self._metode,
-                               command=self._hitung, bg=Tema.PANEL, fg=Tema.TEKS,
-                               activebackground=Tema.PANEL, activeforeground=Tema.TEKS,
-                               selectcolor=Tema.KARTU, highlightthickness=0, bd=0,
-                               font=(Tema.FONT, 10), cursor="hand2", anchor="w",
-                               width=13).grid(row=i // 2, column=i % 2, sticky="w")
+                u = UbinMetode(grid_m, nama, "", lambda n=nama: self._pilih(n),
+                               terpilih=(i == 0), lebar=132, tinggi=44, kompak=True,
+                               bg=Tema.PANEL)
+                u.grid(row=i // 2, column=i % 2, padx=2, pady=2)
+                self._ubin[nama] = u
             self._catatan = tk.Label(kanan, text="", fg=Tema.REDUP, bg=Tema.PANEL,
                                      justify="left", wraplength=260, font=(Tema.FONT, 9))
             self._catatan.pack(anchor="w", padx=20, pady=(8, 0))
@@ -91,6 +93,12 @@ class DialogProduk(tk.Toplevel):
         y = r.winfo_y() + (r.winfo_height() - self.winfo_reqheight()) // 2
         self.geometry(f"+{max(0, x)}+{max(0, y)}")
 
+    def _pilih(self, nama):
+        self._metode.set(nama)
+        for k, u in self._ubin.items():
+            u.atur(k == nama)
+        self._hitung()
+
     def _hitung(self):
         toko = self._app.toko
         kelas = toko.METODE[self._metode.get()]
@@ -107,8 +115,34 @@ class DialogProduk(tk.Toplevel):
         self._rincian.configure(text=teks)
         self._catatan.configure(text=catatan)
 
+    def _bayar_lewat_halaman(self, nama, kelas):
+        """QRIS / Transfer Bank: tampilkan kode QR atau virtual account dulu."""
+        app = self._app
+        hasil = {}
+
+        def bayar(tagihan):
+            ok, pesan, kirim = app.toko.beli(self._produk, nama)
+            if ok:
+                hasil["kirim"] = kirim
+            return ok, pesan
+
+        def selesai(pesan):
+            messagebox.showinfo(
+                "Berhasil", f"{pesan}\n\nKunci lisensi:\n{hasil['kirim'].get_kunci()}\n\n"
+                            f"Game sudah ada di Library kamu.", parent=self)
+            self.destroy()
+            app.refresh_semua()
+
+        DialogBayar(app, self, f"Beli {self._produk.get_nama_produk()}", nama, kelas,
+                    self._produk.harga_akhir(), "Harga", "ORD", bayar, selesai)
+
     def _beli(self):
         app = self._app
+        nama = self._metode.get()
+        kelas = app.toko.METODE[nama]
+        if perlu_halaman_bayar(nama) and self._produk.harga_akhir() > 0:
+            self._bayar_lewat_halaman(nama, kelas)
+            return
         if app.pengaturan.get_konfirmasi() and not messagebox.askyesno(
                 "Konfirmasi", f"Beli '{self._produk.get_nama_produk()}'?", parent=self):
             return

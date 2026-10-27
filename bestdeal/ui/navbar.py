@@ -107,7 +107,9 @@ class NavBarTamu(tk.Frame):
 
 class NavBarSeller(tk.Frame):
     """Navbar untuk seller yang sudah login: Dashboard, Upload Game, nama toko, Keluar."""
-    MENU = (("dashboard", "DASHBOARD"), ("upload", "UPLOAD GAME"))
+    MENU = (("dashboard", "DASHBOARD"), ("upload", "UPLOAD GAME"), ("kelola", "KELOLA GAME"),
+            ("penjualan", "PENJUALAN"))
+    ALIAS = {"edit": "kelola"}      # halaman edit menyalakan menu Kelola Game
 
     def __init__(self, parent, app):
         super().__init__(parent, bg=Tema.NAV, height=72)
@@ -148,6 +150,7 @@ class NavBarSeller(tk.Frame):
                       font=(Tema.FONT, 13, "bold"))
 
     def set_aktif(self, kunci):
+        kunci = self.ALIAS.get(kunci, kunci)
         for k, (lb, garis) in self._item.items():
             if k == kunci:
                 lb.configure(fg=Tema.TEKS)
