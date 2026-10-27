@@ -1,15 +1,15 @@
+# ======================================================================
+#                            BEST DEAL                                 #
+#          Platform Digital Untuk Permainan Video (Game) PC            #
+# ======================================================================
+
 """
-BestDeal - Aplikasi Desktop Toko Game (tema putih-orange) berbasis Tkinter, rasio 16:9.
-
-Cara jalan:  pip install Pillow  lalu  python bestdeal.py   (Python 3.9+)
-
 Penerapan 4 pilar OOP
----------------------
 1. ENCAPSULATION : atribut private (__x) / protected (_x) + getter/setter dengan validasi
                    (Customer.__saldo, Produk.__harga, Pengaturan.__aksen, dst).
 2. INHERITANCE   : User -> Customer, Seller | Produk -> Game, DLC, Bundle
                    Pembayaran -> PembayaranSaldo, PembayaranQRIS, PembayaranKartu
-                   Halaman -> HomePage, LibraryPage, AkunPage, SettingPage
+                   Halaman -> HomePage, LibraryPage
 3. POLYMORPHISM  : method yang sama, perilaku beda di tiap subclass:
                    tampilkan_profil(), harga_akhir(), bisa_dibeli_oleh(), berikan_ke(),
                    tarif_admin(), proses(), bangun()
@@ -648,32 +648,33 @@ class TokoGame:
 
     # ---------- data demo ----------
     def __isi_katalog(self):
-        nova = Seller("S001", "Nova Studio", "hi@novastudio.id", "081200000001", "Jakarta", 4.8)
-        iron = Seller("S002", "Ironclad Games", "hi@ironclad.id", "081200000002", "Bandung", 4.5)
+        Valve = Seller("S001", "Valve", "hi@valve.id", "081200000001", "USA", 4.8)
+        ParadoxInteractive = Seller("S002", "Paradox Interactive", "hi@ParadoxInteractive.id", "081200000002", "Stockholm", 4.6)
         lantern = Seller("S003", "Lantern Works", "hi@lantern.id", "081200000003", "Surabaya", 4.6)
-        barn = Seller("S004", "Pixel Barn", "hi@pixelbarn.id", "081200000004", "Yogyakarta", 4.9)
+        ea = Seller("S004", "Ea", "hi@ea.id", "081200000004", "USA", 4.9)
         resmi = Seller("S000", "BestDeal Official", "cs@bestdeal.id", "081200000000", "Jakarta", 5.0)
         bandai = Seller("S005", "Bandai Namco", "cs@bandainamco.id", "081200000005", "Tokyo", 4.7)
         cdpr = Seller("S006", "CD PROJEKT RED", "cs@cdprojektred.id", "081200000006", "Warsaw", 4.5)
         sega = Seller("S007", "SEGA", "hi@sega.id", "081200000007", "Tokyo", 4.6)
         xbox = Seller("S008", "Xbox Game Studios", "hi@xboxgamestudios.id", "081200000008", "Redmond", 4.8)
         capcom = Seller("S009", "Capcom", "hi@capcom.id", "081200000009", "USA", 4.7)
-        rockstar = Seller("S005", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
-        crystaldynamic = Seller("S006", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
+        rockstar = Seller("S010", "Rockstar Games", "hi@rockstargames.id", "081200000005", "USA", 4.7)
+        crystaldynamic = Seller("S011", "Crystal dynamic", "hi@crystaldynamic.id", "081200000006", "USA", 4.4)
+        ConcernedApe = Seller("S012", "ConcernedApe", "hi@concernedape.id", "081200000006", "USA", 4.4)
 
-        g1 = Game("G001", "Counter Strike 2", 549000, "Tembak", nova,
+        g1 = Game("G001", "Counter Strike 2", 549000, "Tembak", Valve,
                "Tembak-menembak taktis legendaris. Bergabunglah dalam pertempuran tim dengan mekanik smoke dinamis dan sub-tick rate presisi",
                 diskon=25, rilis="2025", ulasan=94,gambar=r"Gambar\CS2.png")
-        g2 = Game("G002", "Need for Speed Unbound", 399000, "Balapan", barn,
+        g2 = Game("G002", "Need for Speed Unbound", 399000, "Balapan", ea,
                "Balapan liar jalanan dengan gaya seni grafiti anime yang unik, kustomisasi mobil mendalam, dan kejar-kejaran polisi yang menegangkan.",
                 diskon=75, rilis="2026", ulasan=88,gambar=r"Gambar\nfs_onbound.png")
-        g3 = Game("G003", "Age of Empires IV", 299000, "Strategi", iron,
+        g3 = Game("G003", "Age of Empires IV", 299000, "Strategi", ParadoxInteractive,
                "Pimpin peradaban bersejarah menuju kejayaan melalui perang abad pertengahan, diplomasi, dan manajemen kerajaan.",
                 rilis="2024", ulasan=91,gambar=r"Gambar\aoe4.png")
         g4 = Game("G004", "Resident Evil 4", 249000, "Horor", capcom,
                "Misi penyelamatan menegangkan di desa terpencil yang terinfeksi wabah parasit mematikan.",
                 diskon=50, rilis="2025", ulasan=86,gambar=r"Gambar\ResidentEvil4.png")
-        g5 = Game("G005", "Stardew Valley", 115000, "Indie", barn,
+        g5 = Game("G005", "Stardew Valley", 115000, "Indie", ConcernedApe,
                 "Warisi kebun tua kakekmu, pelajari cara hidup dari tanah, dan ubah ladang terbengkalai menjadi rumah yang makmur.",
                 diskon=20, rilis="2016", ulasan=98, gambar=r"Gambar\stardew_valley.png")
         g6 = Game("G006", "Red Dead Redemption 2", 599000, "Aksi", rockstar,
@@ -718,10 +719,10 @@ class TokoGame:
                  gambar=r"Gambar\PhantomLiberty.png")
         b1 = Bundle("B001", "Paket RPG Legendaris", [g11, g12], resmi,
                     "Elden Ring dan Cyberpunk 2077 dalam satu paket hemat.",
-                    gambar=r"Gambar\EldenRing.png")
+                    gambar=r"Gambar\Elden&Cyberpunk.png")
         b2 = Bundle("B002", "Paket Aksi Dunia Terbuka", [g12, g6], resmi,
                     "Cyberpunk 2077 dan Red Dead Redemption 2 dalam satu paket hemat.",
-                    gambar=r"Gambar\Rdr2.png")
+                    gambar=r"Gambar\RDR&Cyberpunk.png")
 
         self.__katalog = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13, g14, g15, d1, d2, b1, b2]
         self.__unggulan = [g2, g4, g12, g14]
@@ -795,7 +796,7 @@ class Pengaturan:
     def __init__(self):
         self.__autoplay = True
         self.__konfirmasi = True
-        self.__layar_penuh = False
+        self.__layar_penuh = True
         self.__aksen = "Oranye"
 
     def get_autoplay(self):
@@ -1090,9 +1091,9 @@ class KartuProduk(tk.Frame):
 # GUI : NAVBAR
 # ======================================================================
 class NavBar(tk.Frame):
-    """Navbar BestDeal. Menu selain TOKO dan kolom cari hanya tampilan (belum bisa diklik)."""
-    MENU = (("home", "TOKO"), ("library", "LIBRARY"), ("akun", "AKUN"), ("setting", "SETTING"))
-    AKTIF = ("home",)
+    """Navbar BestDeal. TOKO & LIBRARY bisa diklik; AKUN & SETTING masih tampilan saja."""
+    MENU = (("home", "TOKO"), ("library", "LIBRARY"))
+    BISA_DIKLIK = ("home", "library")
 
     def __init__(self, parent, app):
         super().__init__(parent, bg=Tema.NAV, height=72)
@@ -1108,14 +1109,20 @@ class NavBar(tk.Frame):
         tk.Label(logo, text="BestDeal", fg=Tema.TEKS, bg=Tema.NAV,
                  font=(Tema.FONT, 18, "bold")).pack(side="left", padx=(10, 0))
 
+        self._item = {}
         for kunci, teks in self.MENU:
-            aktif = kunci in self.AKTIF
+            klik = kunci in self.BISA_DIKLIK
             f = tk.Frame(self, bg=Tema.NAV)
             f.pack(side="left", fill="y", padx=4)
-            tk.Label(f, text=teks, fg=Tema.TEKS if aktif else Tema.NONAKTIF, bg=Tema.NAV,
-                     font=(Tema.FONT, 10, "bold"), padx=12).pack(expand=True)
-            tk.Frame(f, bg=Tema.aksen if aktif else Tema.NAV, height=3).pack(
-                fill="x", side="bottom")
+            lb = tk.Label(f, text=teks, bg=Tema.NAV, font=(Tema.FONT, 10, "bold"), padx=12,
+                          cursor="hand2" if klik else "arrow")
+            lb.pack(expand=True)
+            garis = tk.Frame(f, bg=Tema.NAV, height=3)
+            garis.pack(fill="x", side="bottom")
+            self._item[kunci] = (lb, garis)
+            if klik:
+                lb.bind("<Button-1>", lambda e, k=kunci: self._app.buka(k))
+        self.set_aktif(None)
 
         self._avatar = tk.Canvas(self, width=40, height=40, bg=Tema.NAV, highlightthickness=0)
         self._avatar.pack(side="right", padx=(12, 32))
@@ -1137,7 +1144,13 @@ class NavBar(tk.Frame):
                       font=(Tema.FONT, 13, "bold"))
 
     def set_aktif(self, kunci):
-        pass    # hanya Home yang aktif untuk saat ini
+        for k, (lb, garis) in self._item.items():
+            if k == kunci:
+                lb.configure(fg=Tema.TEKS)
+                garis.configure(bg=Tema.aksen)
+            else:
+                lb.configure(fg=Tema.REDUP if k in self.BISA_DIKLIK else Tema.NONAKTIF)
+                garis.configure(bg=Tema.NAV)
 
 
 # ======================================================================
@@ -1403,7 +1416,9 @@ class HomePage(Halaman):
             tk.Label(kiri, text="Belum ada game di library.", fg=Tema.REDUP, bg=Tema.PANEL2,
                      font=(Tema.FONT, 10)).pack(anchor="w", padx=22, pady=(4, 18))
         for g in game:
-            self._baris(kiri, g, f"{customer.get_jam_main(g):.1f} jam dimainkan")
+            r = self._baris(kiri, g, f"{customer.get_jam_main(g):.1f} jam dimainkan")
+            r.configure(cursor="hand2")
+            self._klik(r, g, self._app.buka_library)
         tk.Frame(kiri, bg=Tema.PANEL2, height=18).pack()
 
         kanan = self._panel(f, "Paket hemat", Tema.PANEL)
@@ -1435,10 +1450,11 @@ class HomePage(Halaman):
                  font=(Tema.FONT, 9)).pack(anchor="w")
         return r
 
-    def _klik(self, w, produk):
-        w.bind("<Button-1>", lambda e: self._app.buka_produk(produk), add="+")
+    def _klik(self, w, produk, aksi=None):
+        aksi = aksi or self._app.buka_produk
+        w.bind("<Button-1>", lambda e: aksi(produk), add="+")
         for c in w.winfo_children():
-            self._klik(c, produk)
+            self._klik(c, produk, aksi)
 
 
 class LibraryPage(Halaman):
@@ -1489,7 +1505,7 @@ class LibraryPage(Halaman):
 
     def _baris(self, g):
         aktif = self._terpilih is not None and g.get_id_produk() == self._terpilih.get_id_produk()
-        bg = Tema.KARTU_HOVER if aktif else Tema.PANEL
+        bg = Tema.KARTU if aktif else Tema.PANEL
         f = tk.Frame(self.daftar.isi, bg=bg, cursor="hand2")
         f.pack(fill="x", padx=10, pady=2)
         c = tk.Canvas(f, width=80, height=45, highlightthickness=0, bg=bg)
@@ -1526,7 +1542,7 @@ class LibraryPage(Halaman):
                                                                       pady=(2, 12))
         baris = tk.Frame(isi, bg=Tema.BG)
         baris.pack(anchor="w", padx=32, pady=(0, 14))
-        TombolFlat(baris, "▶  MAIN", lambda: self._main(g), bg="#2ea043",
+        TombolFlat(baris, "▶  MAIN", lambda: self._main(g), bg=Tema.aksen,
                    font=(Tema.FONT, 12, "bold"), padx=36, pady=10).pack(side="left")
         self._status = tk.Label(baris, text="", fg=Tema.HIJAU, bg=Tema.BG,
                                 font=(Tema.FONT, 10, "bold"))
@@ -1555,161 +1571,6 @@ class LibraryPage(Halaman):
         self.after(1600, self.bangun)
         self._app.perbarui_navbar()
         self._app.halaman_tandai_kotor("home")
-
-
-class AkunPage(Halaman):
-    def __init__(self, parent, app):
-        super().__init__(parent, app)
-        self.scroll = ScrollFrame(self)
-        self.scroll.pack(fill="both", expand=True)
-
-    def _kartu(self, parent, judul):
-        k = tk.Frame(parent, bg=Tema.PANEL)
-        tk.Label(k, text=judul, fg=Tema.TEKS, bg=Tema.PANEL,
-                 font=(Tema.FONT, 12, "bold")).pack(anchor="w", padx=20, pady=(16, 8))
-        return k
-
-    def bangun(self):
-        self.scroll.kosongkan()
-        isi = self.scroll.isi
-        toko = self._app.toko
-        c = toko.get_customer()
-        self.judul(isi, "Akun Saya")
-
-        grid = tk.Frame(isi, bg=Tema.BG)
-        grid.pack(fill="x", padx=32)
-        grid.columnconfigure(0, weight=1, uniform="k")
-        grid.columnconfigure(1, weight=1, uniform="k")
-
-        # --- profil ---
-        kp = self._kartu(grid, "Profil")
-        kp.grid(row=0, column=0, sticky="nsew", padx=(0, 9), pady=(0, 18))
-        av = tk.Canvas(kp, width=84, height=84, bg=Tema.PANEL, highlightthickness=0)
-        av.pack(anchor="w", padx=20)
-        av.create_oval(2, 2, 82, 82, fill=Tema.aksen, outline="")
-        av.create_text(42, 42, text=c.get_nama()[:1].upper(), fill="#fff",
-                       font=(Tema.FONT, 30, "bold"))
-        tk.Label(kp, text=f"{c.get_nama()}  ({c.peran()})", fg=Tema.TEKS, bg=Tema.PANEL,
-                 font=(Tema.FONT, 15, "bold")).pack(anchor="w", padx=20, pady=(10, 6))
-        tk.Label(kp, text=c.tampilkan_profil(), fg=Tema.REDUP, bg=Tema.PANEL, justify="left",
-                 font=("Consolas", 10)).pack(anchor="w", padx=20)
-        ubah = tk.Frame(kp, bg=Tema.PANEL)
-        ubah.pack(anchor="w", padx=20, pady=(14, 18))
-        e = tk.Entry(ubah, bg=Tema.KARTU, fg=Tema.TEKS, insertbackground=Tema.TEKS,
-                     relief="flat", font=(Tema.FONT, 11), width=18)
-        e.insert(0, c.get_nama())
-        e.pack(side="left", ipady=6, padx=(0, 8))
-        TombolFlat(ubah, "Ubah Nama", lambda: self._ubah_nama(e.get()), pady=6).pack(side="left")
-
-        # --- saldo & statistik ---
-        ks = self._kartu(grid, "Dompet & Statistik")
-        ks.grid(row=0, column=1, sticky="nsew", padx=(9, 0), pady=(0, 18))
-        tk.Label(ks, text=rupiah(c.get_saldo()), fg=Tema.HIJAU, bg=Tema.PANEL,
-                 font=(Tema.FONT, 26, "bold")).pack(anchor="w", padx=20)
-        tk.Label(ks, text="Saldo BestDeal", fg=Tema.REDUP, bg=Tema.PANEL,
-                 font=(Tema.FONT, 10)).pack(anchor="w", padx=20, pady=(0, 10))
-        tp = tk.Frame(ks, bg=Tema.PANEL)
-        tp.pack(anchor="w", padx=20, pady=(0, 14))
-        for n in (100_000, 500_000, 1_000_000):
-            TombolFlat(tp, f"+ {rupiah(n)}", lambda x=n: self._topup(x), pady=6,
-                       font=(Tema.FONT, 9, "bold")).pack(side="left", padx=(0, 8))
-        game = toko.library_game()
-        total_jam = sum(c.get_jam_main(g) for g in game)
-        tk.Label(ks, text=f"Game di library : {len(game)}\nTotal jam main  : {total_jam:.1f} jam\n"
-                          f"Total pesanan   : {len(toko.get_riwayat())}",
-                 fg=Tema.REDUP, bg=Tema.PANEL, justify="left",
-                 font=("Consolas", 10)).pack(anchor="w", padx=20, pady=(0, 18))
-
-        # --- riwayat ---
-        self.judul(isi, "Riwayat Pesanan", pad=(6, 10))
-        riwayat = toko.get_riwayat()
-        if not riwayat:
-            tk.Label(isi, text="Belum ada pesanan. Pembelian kamu akan muncul di sini.",
-                     fg=Tema.REDUP, bg=Tema.BG, font=(Tema.FONT, 10)).pack(anchor="w", padx=32)
-        for pesanan, bayar, kirim in reversed(riwayat):
-            k = tk.Frame(isi, bg=Tema.PANEL)
-            k.pack(fill="x", padx=32, pady=(0, 10))
-            teks = (pesanan.get_pesanan() +
-                    f"\nMetode     : {bayar.get_metode()} (admin {rupiah(bayar.biaya_admin())})"
-                    f"\nDibayar    : {rupiah(bayar.get_jumlah_bayar())}  [{bayar.get_status()}]"
-                    f"\nKunci      : {kirim.get_kunci()}  [{kirim.get_status()} ke "
-                    f"{kirim.get_alamat_tujuan()}]"
-                    f"\nPengiriman : {kirim.get_jasa()} • {kirim.get_estimasi()} • "
-                    f"ongkir {rupiah(kirim.get_biaya())}")
-            tk.Label(k, text=teks, fg=Tema.TEKS, bg=Tema.PANEL, justify="left",
-                     font=("Consolas", 10), padx=18, pady=14).pack(anchor="w")
-        tk.Frame(isi, bg=Tema.BG, height=30).pack()
-
-    def _ubah_nama(self, nama):
-        if not nama.strip():
-            messagebox.showwarning("Nama kosong", "Nama tidak boleh kosong.")
-            return
-        self._app.toko.get_customer().set_nama(nama)
-        self._app.refresh_semua()
-
-    def _topup(self, jumlah):
-        self._app.toko.get_customer().tambah_saldo(jumlah)
-        self._app.refresh_semua()
-
-
-class SettingPage(Halaman):
-    def __init__(self, parent, app):
-        super().__init__(parent, app)
-        self.scroll = ScrollFrame(self)
-        self.scroll.pack(fill="both", expand=True)
-
-    def _baris(self, judul, ket):
-        f = tk.Frame(self.scroll.isi, bg=Tema.PANEL)
-        f.pack(fill="x", padx=32, pady=(0, 10))
-        kiri = tk.Frame(f, bg=Tema.PANEL)
-        kiri.pack(side="left", padx=20, pady=16)
-        tk.Label(kiri, text=judul, fg=Tema.TEKS, bg=Tema.PANEL,
-                 font=(Tema.FONT, 11, "bold")).pack(anchor="w")
-        tk.Label(kiri, text=ket, fg=Tema.REDUP, bg=Tema.PANEL,
-                 font=(Tema.FONT, 9)).pack(anchor="w")
-        kanan = tk.Frame(f, bg=Tema.PANEL)
-        kanan.pack(side="right", padx=20)
-        return kanan
-
-    def _cek(self, parent, var, cmd):
-        return tk.Checkbutton(parent, variable=var, command=cmd, bg=Tema.PANEL,
-                              activebackground=Tema.PANEL, selectcolor=Tema.KARTU,
-                              fg=Tema.TEKS, highlightthickness=0, bd=0, cursor="hand2")
-
-    def bangun(self):
-        self.scroll.kosongkan()
-        p = self._app.pengaturan
-        self.judul(self.scroll.isi, "Pengaturan")
-
-        v1 = tk.BooleanVar(value=p.get_autoplay())
-        self._cek(self._baris("Banner otomatis", "Banner unggulan di halaman Toko geser tiap 5 detik."),
-                  v1, lambda: p.set_autoplay(v1.get())).pack()
-
-        v2 = tk.BooleanVar(value=p.get_konfirmasi())
-        self._cek(self._baris("Konfirmasi sebelum membeli", "Tampilkan dialog konfirmasi saat checkout."),
-                  v2, lambda: p.set_konfirmasi(v2.get())).pack()
-
-        v3 = tk.BooleanVar(value=p.get_layar_penuh())
-
-        def layar():
-            p.set_layar_penuh(v3.get())
-            self._app.atur_layar_penuh(v3.get())
-        self._cek(self._baris("Layar penuh", "Tekan Esc untuk keluar dari mode layar penuh."),
-                  v3, layar).pack()
-
-        kanan = self._baris("Warna aksen", "Ganti warna utama aplikasi.")
-        for nama, hex_ in Tema.AKSEN.items():
-            aktif = nama == p.get_aksen()
-            TombolFlat(kanan, ("✓ " if aktif else "") + nama, lambda n=nama: self._ganti(n),
-                       bg=hex_, padx=12, pady=6, font=(Tema.FONT, 9, "bold")).pack(
-                side="left", padx=4)
-
-        self._baris("Tentang", "BestDeal v1.0 • Tkinter • Proyek PBO")
-        tk.Frame(self.scroll.isi, bg=Tema.BG, height=30).pack()
-
-    def _ganti(self, nama):
-        self._app.pengaturan.set_aksen(nama)
-        self._app.bangun_ulang("setting")
 
 
 # ======================================================================
@@ -1823,13 +1684,14 @@ class AplikasiBestDeal:
         self.root = tk.Tk()
         self.root.title("BestDeal — Toko Game")
         self.root.configure(bg=Tema.BG)
+        sw = self.root.winfo_screenwidth()
         sh = self.root.winfo_screenheight()
         w, h = (1280, 720) if sh >= 800 else (1152, 648)
-        x = (self.root.winfo_screenwidth() - w) // 2
+        x = (sw - w) // 2
         y = max(0, (sh - h) // 2 - 20)
         self.root.geometry(f"{w}x{h}+{x}+{y}")
         self.root.minsize(1024, 576)
-        self._lebar = w
+        self._lebar = sw
         self._after_resize = None
 
         customer = Customer("C001", "Arya", "password123", "arya@email.com",
@@ -1841,6 +1703,7 @@ class AplikasiBestDeal:
         self.navbar = None
         self.halaman = {}
         self._aktif = None
+        self.atur_layar_penuh(True)
         self._bangun_ui("home")
 
         self.root.bind("<Configure>", self._saat_resize)
@@ -1848,6 +1711,7 @@ class AplikasiBestDeal:
         self.root.bind_all("<Button-4>", self._wheel)
         self.root.bind_all("<Button-5>", self._wheel)
         self.root.bind("<Escape>", lambda e: self.atur_layar_penuh(False))
+        self.root.bind("<F11>", lambda e: self.toggle_layar_penuh())
 
     # ---------- util ----------
     def _gaya(self):
@@ -1878,14 +1742,9 @@ class AplikasiBestDeal:
         self.halaman = {
             "home": HomePage(wadah, self),
             "library": LibraryPage(wadah, self),
-            "akun": AkunPage(wadah, self),
-            "setting": SettingPage(wadah, self),
         }
         self._aktif = None
         self.buka(awal)
-
-    def bangun_ulang(self, awal="home"):
-        self._bangun_ui(awal)
 
     # ---------- navigasi ----------
     def buka(self, nama):
@@ -1928,6 +1787,9 @@ class AplikasiBestDeal:
     def atur_layar_penuh(self, aktif):
         self.pengaturan.set_layar_penuh(aktif)
         self.root.attributes("-fullscreen", aktif)
+
+    def toggle_layar_penuh(self):
+        self.atur_layar_penuh(not self.pengaturan.get_layar_penuh())
 
     def _saat_resize(self, e):
         if e.widget is not self.root or abs(e.width - self._lebar) < 40:
