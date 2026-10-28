@@ -78,8 +78,8 @@ def buat_katalog_demo():
             "Pemain akan mengenakan sepatu bot berlumuran darah milik DOOM Slayer dalam perang abad pertengahan yang kelam dan mengerikan melawan Neraka—sebuah pengalaman yang belum pernah ada sebelumnya.",
             diskon=20, rilis="2025", ulasan=93, gambar="Gambar/Doom.png")
     g16 = Game("G016", "Minecraft", 200000, "Petualangan", cdpr,
-            "Pemain akan mengenakan sepatu bot berlumuran darah milik DOOM Slayer dalam perang abad pertengahan yang kelam dan mengerikan melawan Neraka—sebuah pengalaman yang belum pernah ada sebelumnya.",
-            diskon=20, rilis="2025", ulasan=93, gambar="Gambar/Doom.png")
+            "Pemain akan melangkah ke dunia kubus tanpa batas untuk merakit impian, bertahan hidup dari ancaman malam, dan mengukir petualangan unik mereka sendiri—sebuah kebebasan berkreasi yang belum ada tandingannya.",
+            diskon=20, rilis="2025", ulasan=93, gambar="Gambar/minecraft.png")
          
 
     d1 = DLC("D001", "Elden Ring: Shadow of the Erdtree", 279000, g11,
