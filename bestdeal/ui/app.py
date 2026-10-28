@@ -52,7 +52,10 @@ class AplikasiBestDeal:
         self._after_resize = None
 
         self.katalog, self.unggulan, library_awal, akun_seller = buat_katalog_demo()
-        self.auth = AuthService([buat_customer_demo(library_awal)], akun_seller)
+        seller_katalog = {p.get_seller().get_id_user(): p.get_seller()
+                          for p in self.katalog if p.get_seller() is not None}
+        self.auth = AuthService([buat_customer_demo(library_awal)], akun_seller,
+                                seller_katalog.values())
         self.laporan = LaporanPenjualan()       # buku besar penjualan, dipakai semua sesi
         buat_penjualan_demo(self.katalog, self.laporan)     # data simulasi awal (hapus = mulai nol)
         self.pengaturan = Pengaturan()

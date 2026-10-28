@@ -3,6 +3,8 @@
 import tkinter as tk
 
 from bestdeal.models.produk import DLC
+from bestdeal.ui.dialog_ulasan import (DialogDaftarUlasan, DialogTulisUlasan,
+                                       tampilkan_rekomendasi)
 from bestdeal.ui.pages.base import Halaman
 from bestdeal.ui.tema import Tema
 from bestdeal.ui.widgets import InputCari, ScrollFrame, TombolFlat, lukis_art
@@ -114,7 +116,36 @@ class LibraryPage(Halaman):
             for d in dlc:
                 tk.Label(isi, text="✓ " + d.get_nama_produk(), fg=Tema.HIJAU, bg=Tema.BG,
                          font=(Tema.FONT, 10)).pack(anchor="w", padx=32)
+        self._bagian_ulasan(isi, g, lebar)
         tk.Frame(isi, bg=Tema.BG, height=30).pack()
+
+    def _bagian_ulasan(self, isi, g, lebar):
+        """Ulasan milik customer untuk game ini + tombol tulis/ubah dan lihat semua ulasan."""
+        toko = self._app.toko
+        saya = toko.ulasan_saya(g)
+        tk.Label(isi, text="Ulasan", fg=Tema.TEKS, bg=Tema.BG,
+                 font=(Tema.FONT, 12, "bold")).pack(anchor="w", padx=32, pady=(20, 6))
+        if saya is None:
+            tk.Label(isi, text="Kamu belum menulis ulasan untuk game ini.", fg=Tema.REDUP,
+                     bg=Tema.BG, font=(Tema.FONT, 10)).pack(anchor="w", padx=32)
+        else:
+            kartu = tk.Frame(isi, bg=Tema.PANEL, padx=16, pady=12)
+            kartu.pack(anchor="w", padx=32)
+            kepala = tk.Frame(kartu, bg=Tema.PANEL)
+            kepala.pack(fill="x")
+            tampilkan_rekomendasi(kepala, Tema.PANEL, saya.get_rekomendasi(), 10).pack(side="left")
+            tk.Label(kepala, text=saya.teks_tanggal(), fg=Tema.REDUP, bg=Tema.PANEL,
+                     font=(Tema.FONT, 9)).pack(side="right", padx=(24, 0))
+            tk.Label(kartu, text=saya.get_komentar(), fg=Tema.TEKS, bg=Tema.PANEL, justify="left",
+                     wraplength=min(lebar, 560), font=(Tema.FONT, 10)).pack(anchor="w", pady=(6, 0))
+        baris = tk.Frame(isi, bg=Tema.BG)
+        baris.pack(anchor="w", padx=32, pady=(10, 0))
+        TombolFlat(baris, "Ubah ulasan" if saya else "Tulis ulasan",
+                   lambda: DialogTulisUlasan(self._app, g, self._app.refresh_semua),
+                   padx=18, pady=8).pack(side="left")
+        TombolFlat(baris, f"Lihat semua ulasan ({g.jumlah_ulasan()})",
+                   lambda: DialogDaftarUlasan(self._app, g), bg=Tema.CHIP,
+                   padx=18, pady=8).pack(side="left", padx=8)
 
     def _main(self, g):
         self._app.toko.get_customer().tambah_jam_main(g, 0.5)

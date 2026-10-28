@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 
+from bestdeal.models.ulasan import Ulasan
 from bestdeal.utils import rupiah
 
 
@@ -120,6 +121,19 @@ class Produk(ABC):
         skor = self.skor_ulasan()
         return f"{skor}% positif" if skor is not None else "Belum ada ulasan"
 
+    # ---- Ulasan pengguna: default "tidak bisa diulas"; Game meng-override (Polymorphism) ----
+    def bisa_diulas(self):
+        return False
+
+    def jumlah_ulasan(self):
+        return 0
+
+    def daftar_ulasan(self):
+        return []
+
+    def ulasan_dari(self, customer):
+        return None
+
     def rincian_pendapatan(self, nominal):
         """Bagi pendapatan satu penjualan: [(produk, nominal)] untuk laporan seller.
 
@@ -145,6 +159,7 @@ class Game(Produk):
         self.__diskon = diskon
         self.__rilis = rilis
         self.__ulasan = ulasan
+        self.__daftar_ulasan = {}       # id_customer -> Ulasan (satu customer, satu ulasan)
 
     def get_rilis(self):
         return self.__rilis
@@ -162,8 +177,49 @@ class Game(Produk):
     def set_rilis(self, rilis):
         self.__rilis = rilis
 
+    # Skor awal (data demo) dihitung seperti BOBOT_AWAL ulasan, lalu ulasan asli ikut dicampur.
+    # Jadi satu ulasan negatif tidak langsung menjatuhkan skor 94% menjadi 0%.
+    BOBOT_AWAL = 20
+
     def skor_ulasan(self):
-        return self.__ulasan if self.__ulasan > 0 else None     # 0 = belum ada ulasan
+        n = len(self.__daftar_ulasan)
+        positif = sum(1 for u in self.__daftar_ulasan.values() if u.get_rekomendasi())
+        awal = min(100, self.__ulasan)
+        if awal > 0:                    # 0 = belum ada skor awal
+            return round((awal * self.BOBOT_AWAL / 100 + positif) * 100 / (self.BOBOT_AWAL + n))
+        return round(positif * 100 / n) if n else None
+
+    def teks_ulasan(self):
+        teks = super().teks_ulasan()
+        n = len(self.__daftar_ulasan)
+        return f"{teks} ({n} ulasan pengguna)" if n else teks
+
+    def bisa_diulas(self):
+        return True
+
+    def jumlah_ulasan(self):
+        return len(self.__daftar_ulasan)
+
+    def daftar_ulasan(self):
+        """Ulasan pengguna, terbaru dulu."""
+        terbaru_dulu = reversed(list(self.__daftar_ulasan.values()))    # urutan masuk dibalik
+        return sorted(terbaru_dulu, key=lambda u: u.get_tanggal(), reverse=True)  # sort stabil
+
+    def ulasan_dari(self, customer):
+        return self.__daftar_ulasan.get(customer.get_id_user())
+
+    def simpan_ulasan(self, customer, rekomendasi, komentar):
+        """Buat ulasan baru, atau ubah ulasan lama milik customer yang sama. Return (Ulasan, baru)."""
+        lama = self.ulasan_dari(customer)
+        if lama is not None:
+            lama.ubah(rekomendasi, komentar)
+            return lama, False
+        ulasan = Ulasan(customer.get_id_user(), customer.get_nama(), rekomendasi, komentar)
+        self.__daftar_ulasan[customer.get_id_user()] = ulasan
+        return ulasan, True
+
+    def hapus_ulasan(self, customer):
+        return self.__daftar_ulasan.pop(customer.get_id_user(), None) is not None
 
     def label_tipe(self):
         return "Game"

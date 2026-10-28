@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from bestdeal.ui.dialog_bayar import DialogBayar, perlu_halaman_bayar
+from bestdeal.ui.dialog_ulasan import DialogDaftarUlasan
 from bestdeal.ui.hias import UbinMetode
 from bestdeal.ui.tema import Tema
 from bestdeal.ui.widgets import TombolFlat, baris_harga, lukis_art
@@ -40,6 +41,15 @@ class DialogProduk(tk.Toplevel):
         tk.Label(kiri, text=f"Publisher: {produk.nama_publisher()}"
                             + (f"  (★ {seller.get_rating()})" if seller else ""),
                  fg=Tema.REDUP, bg=Tema.BG, font=(Tema.FONT, 9)).pack(anchor="w")
+        if produk.bisa_diulas():            # polymorphism: hanya Game yang punya ulasan
+            baris_ulasan = tk.Frame(kiri, bg=Tema.BG)
+            baris_ulasan.pack(anchor="w")
+            tk.Label(baris_ulasan, text=f"Ulasan: {produk.teks_ulasan()}", fg=Tema.REDUP,
+                     bg=Tema.BG, font=(Tema.FONT, 9)).pack(side="left")
+            lihat = tk.Label(baris_ulasan, text="  Lihat ulasan", fg=Tema.AKSEN_TEKS, bg=Tema.BG,
+                             cursor="hand2", font=(Tema.FONT, 9, "bold"))
+            lihat.pack(side="left")
+            lihat.bind("<Button-1>", lambda e: DialogDaftarUlasan(app, produk, induk=self))
         info = produk.info_tambahan()      # polymorphism, tanpa isinstance
         if info:
             tk.Label(kiri, text=info, fg=Tema.REDUP, bg=Tema.BG, wraplength=lebar_art,

@@ -125,23 +125,69 @@ class LoginPage(AuthPageBase):
 
 
 class DaftarPage(AuthPageBase):
+    """Daftar akun baru, sebagai Pembeli (Customer) atau Seller (Publisher)."""
+    PERAN = (("Customer", "Pembeli"), ("Publisher", "Seller"))
+
+    def __init__(self, parent, app):
+        super().__init__(parent, app)
+        self._peran = "Customer"
+        self._isian = {}
+
+    def saat_ditampilkan(self):
+        self._peran = "Customer"        # setiap kali dibuka mulai sebagai Pembeli, form kosong
+        self._isian = {}
+        self.bangun()
+
     def bangun(self):
-        kartu = self._kartu("Buat akun baru", "Gratis. Cukup beberapa detik.")
-        self._nama = self._field(kartu, "Nama")
+        seller = self._peran == "Publisher"
+        kartu = self._kartu("Daftar sebagai Seller" if seller else "Buat akun baru",
+                            "Jual gamemu di BestDeal. Gratis." if seller
+                            else "Gratis. Cukup beberapa detik.")
+        self._pilih_peran(kartu)
+        self._nama = self._field(kartu, "Nama toko / publisher" if seller else "Nama")
         self._email = self._field(kartu, "Email")
         self._sandi = self._field(kartu, "Kata sandi (min. 6 karakter)", sembunyi=True)
         self._konfirmasi = self._field(kartu, "Ulangi kata sandi", sembunyi=True)
         self._galat = self._label_galat(kartu)
         self._galat.pack(anchor="w", pady=(10, 0))
-        TombolFlat(kartu, "Daftar", self._kirim, padx=24, pady=11).pack(fill="x", pady=(14, 0))
+        TombolFlat(kartu, "Daftar sebagai Seller" if seller else "Daftar", self._kirim,
+                   padx=24, pady=11).pack(fill="x", pady=(14, 0))
         self._tautan(kartu, "Sudah punya akun?  ", "Masuk", self._app.tampilkan_login)
+        for kunci, entry in self._entri().items():      # pulihkan isian saat ganti peran
+            entry.insert(0, self._isian.get(kunci, ""))
         self._nama.focus_set()
 
+    def _entri(self):
+        return {"nama": self._nama, "email": self._email, "sandi": self._sandi,
+                "konfirmasi": self._konfirmasi}
+
+    def _pilih_peran(self, kartu):
+        """Dua tombol pilihan peran; yang aktif berwarna aksen."""
+        baris = tk.Frame(kartu, bg=Tema.PANEL)
+        baris.pack(fill="x", pady=(16, 0))
+        tk.Label(baris, text="Daftar sebagai", fg=Tema.REDUP, bg=Tema.PANEL,
+                 font=(Tema.FONT, 9, "bold")).pack(anchor="w", pady=(0, 4))
+        for i, (peran, teks) in enumerate(self.PERAN):
+            aktif = peran == self._peran
+            TombolFlat(baris, teks, lambda p=peran: self._ganti_peran(p),
+                       bg=Tema.aksen if aktif else Tema.CHIP, padx=20, pady=8).pack(
+                side="left", fill="x", expand=True,
+                padx=(0, 6) if i < len(self.PERAN) - 1 else 0)
+
+    def _ganti_peran(self, peran):
+        if peran == self._peran:
+            return
+        self._isian = {k: e.get() for k, e in self._entri().items()}
+        self._peran = peran
+        self.bangun()                   # _kartu() mengosongkan lalu membangun ulang form
+
     def _kirim(self):
-        ok, pesan, customer = self._app.auth.daftar(
-            self._nama.get(), self._email.get(), self._sandi.get(), self._konfirmasi.get())
+        daftar = (self._app.auth.daftar_seller if self._peran == "Publisher"
+                  else self._app.auth.daftar)
+        ok, pesan, user = daftar(self._nama.get(), self._email.get(), self._sandi.get(),
+                                 self._konfirmasi.get())
         if not ok:
             self._galat.configure(text=pesan)
             return
         self._app.auth.masuk(self._email.get(), self._sandi.get())
-        self._app.masuk_toko(customer)
+        self._app.masuk(user)           # Customer -> toko, Seller -> dashboard seller

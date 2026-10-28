@@ -14,6 +14,8 @@ class TokoGame:
     Katalog dipakai bersama (shared) oleh semua sesi.
     """
     METODE = DAFTAR_METODE
+    KOMENTAR_MIN = 10
+    KOMENTAR_MAKS = 500
 
     def __init__(self, customer, katalog, unggulan, laporan=None):
         self.__customer = customer
@@ -82,3 +84,35 @@ class TokoGame:
         if self.__laporan is not None:      # untuk statistik seller
             self.__laporan.catat(produk, self.__customer.get_id_user())
         return True, "Pembelian berhasil!", pengiriman
+
+    # ---------- ulasan ----------
+    def bisa_mengulas(self, produk):
+        """Hanya game yang sudah dimiliki customer yang boleh diulas. Return (bool, pesan)."""
+        if not produk.bisa_diulas():
+            return False, "Hanya game yang bisa diulas."
+        if not self.__customer.punya(produk):
+            return False, "Beli game ini dulu untuk menulis ulasan."
+        return True, ""
+
+    def ulasan_saya(self, produk):
+        return produk.ulasan_dari(self.__customer)
+
+    def kirim_ulasan(self, produk, rekomendasi, komentar):
+        """Validasi lalu simpan (atau perbarui) ulasan. Return (ok, pesan, ulasan)."""
+        ok, pesan = self.bisa_mengulas(produk)
+        if not ok:
+            return False, pesan, None
+        if rekomendasi is None:
+            return False, "Pilih dulu: direkomendasikan atau tidak.", None
+        komentar = komentar.strip()
+        if len(komentar) < self.KOMENTAR_MIN:
+            return False, f"Komentar minimal {self.KOMENTAR_MIN} karakter.", None
+        if len(komentar) > self.KOMENTAR_MAKS:
+            return False, f"Komentar maksimal {self.KOMENTAR_MAKS} karakter.", None
+        ulasan, baru = produk.simpan_ulasan(self.__customer, rekomendasi, komentar)
+        return True, ("Ulasan terkirim. Terima kasih!" if baru else "Ulasan diperbarui."), ulasan
+
+    def hapus_ulasan(self, produk):
+        if produk.bisa_diulas() and produk.hapus_ulasan(self.__customer):
+            return True, "Ulasan dihapus."
+        return False, "Kamu belum punya ulasan untuk game ini."
